@@ -67,7 +67,7 @@ namespace CustomReverseProxy.Controllers
             var clientId = _configuration["Auth0:ClientId"];
             var clientSecret = _configuration["Auth0:ClientSecret"];
             var redirectUri = _configuration["Auth0:RedirectUri"];
-            var audience = "https://test"
+            var audience = "https://test";
             var tokenEndpoint = $"https://{domain}/oauth/token";
 
             var requestBody = new
