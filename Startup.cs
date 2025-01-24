@@ -34,6 +34,16 @@ namespace CustomReverseProxy
 		services.Configure<AppSettings>(_configuration.GetSection("Auth0"));
 		
 		services.AddControllers();
+
+		services
+		.AddSession(options =>
+		{
+			options.IdleTimeout = TimeSpan.FromMinutes(30); // Set timeout period
+			options.Cookie.HttpOnly = true;
+			options.Cookie.IsEssential = true;
+		});
+		
+		services.AddDistributedMemoryCache();
 		
 		services
 			.AddAuthentication(options =>
@@ -49,15 +59,6 @@ namespace CustomReverseProxy
             	options.Audience = "https://test";
 				options.RequireHttpsMetadata = true;
         	})
-			.AddSession(options =>
-			{
-				options.IdleTimeout = TimeSpan.FromMinutes(30); // Set timeout period
-				options.Cookie.HttpOnly = true;
-				options.Cookie.IsEssential = true;
-			})
-			.AddDistributedMemoryCache();
-
-		services
 			.AddAuthorization(options =>
 			{
 				options.AddPolicy("AuthenticatedUsers", policy =>
@@ -65,6 +66,7 @@ namespace CustomReverseProxy
 					policy.RequireAuthenticatedUser();
 				});
 			});
+
 
 		//services.AddHttpClient("BackendProxy");
         }
