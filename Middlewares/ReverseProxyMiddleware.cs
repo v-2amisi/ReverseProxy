@@ -23,12 +23,6 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            if (context.Request.Path.StartsWithSegments(_oidcCallbackPath, StringComparison.OrdinalIgnoreCase))
-            {
-                await HandleOidcCallbackAsync(context);
-                return;
-            }
-
             var targetUri = BuildTargetUri(context.Request);
 
             if (targetUri != null)
@@ -46,7 +40,7 @@ namespace CustomReverseProxy.Middlewares
 
             await _nextMiddleware(context);
         }
-
+/*
         private async Task HandleOidcCallbackAsync(HttpContext context)
         {
             // Process the OIDC callback request
@@ -78,7 +72,8 @@ namespace CustomReverseProxy.Middlewares
                 await context.Response.WriteAsync("Failed to exchange code for tokens");
             }
         }
-
+*/
+/*
         private async Task<TokenResponse> ExchangeCodeForTokensAsync(string code)
         {
             var tokenEndpoint = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/oauth/token"; // Replace with your Auth0 token endpoint
@@ -105,7 +100,7 @@ namespace CustomReverseProxy.Middlewares
 
             return null;
         }
-
+*/
         private HttpRequestMessage CreateTargetMessage(HttpContext context, Uri targetUri)
         {
             var requestMessage = new HttpRequestMessage
@@ -156,11 +151,12 @@ namespace CustomReverseProxy.Middlewares
             context.Response.Headers.Remove("transfer-encoding");
         }
     }
-
+/*
     public class TokenResponse
     {
         public string AccessToken { get; set; }
         public string IdToken { get; set; }
     }
+*/
 }
 
