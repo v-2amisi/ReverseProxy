@@ -35,27 +35,29 @@ namespace CustomReverseProxy
 		
 		services.AddControllers();
 		
-		services.AddAuthentication(options =>
+		services
+			.AddAuthentication(options =>
         	{
-            		options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-			options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            	options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+				options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         	})
-		.AddCookie()
-		.AddJwtBearer(options =>
+			.AddCookie()
+			.AddJwtBearer(options =>
         	{	
-            		options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
-            		options.Audience = "https://test";
-			options.RequireHttpsMetadata = true;
+            	options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
+            	options.Audience = "https://test";
+				options.RequireHttpsMetadata = true;
         	});
 
-		services.AddAuthorization(options =>
-		{
-			options.AddPolicy("AuthenticatedUsers", policy =>
+		services
+			.AddAuthorization(options =>
 			{
-				policy.RequireAuthenticatedUser();
+				options.AddPolicy("AuthenticatedUsers", policy =>
+				{
+					policy.RequireAuthenticatedUser();
+				});
 			});
-		});
 
 		//services.AddHttpClient("BackendProxy");
         }
@@ -70,30 +72,17 @@ namespace CustomReverseProxy
 
             // app.UseMiddleware<ReverseProxyMiddleware>();
 
-	    app.UseRouting();
-	    app.UseAuthentication();
-	    app.UseAuthorization();
+			app.UseRouting();
+			app.UseAuthentication();
+			app.UseAuthorization();
 
-	    app.UseMiddleware<AuthenticationMiddleware>();
-	    app.UseMiddleware<ReverseProxyMiddleware>();
-	    app.UseEndpoints(endpoints => 
-	    {
-	    	endpoints.MapControllers();
-	    });
-/*
-	    app.Run(async (context) =>
-		{
-			await context.Response.WriteAsync("<a href='/googleforms/d/e/1FAIpQLSdJwmxHIl_OCh-CI1J68G1EVSr9hKaYFLh3dHh8TLnxjxCJWw/viewform?hl=en'>Register to receive a T-shirt</a>");
-		});
-*/
-            /*app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
-	    */
+			app.UseMiddleware<AuthenticationMiddleware>();
+			app.UseMiddleware<ReverseProxyMiddleware>();
+			app.UseEndpoints(endpoints => 
+			{
+				endpoints.MapControllers();
+			});
+
         }
     }
 }

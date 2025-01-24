@@ -8,7 +8,7 @@ namespace CustomReverseProxy.Middlewares
     public class AuthenticationMiddleware
     {
         private readonly RequestDelegate _next;
-	private readonly AppSettings _appSettings;
+	    private readonly AppSettings _appSettings;
 
         public AuthenticationMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
         {
