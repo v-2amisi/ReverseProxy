@@ -89,6 +89,10 @@ namespace CustomReverseProxy.Controllers
             }
 
             var responseBody = await response.Content.ReadAsStringAsync();
+            if(!responseBody)
+            {
+                return StatusCode(500, $"Callback processing error: {responseBody}");
+            }
             return JsonSerializer.Deserialize<TokenResponse>(responseBody);
         }
 
