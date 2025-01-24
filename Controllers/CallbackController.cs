@@ -67,7 +67,7 @@ namespace CustomReverseProxy.Controllers
             var clientId = _configuration["Auth0:ClientId"];
             var clientSecret = _configuration["Auth0:ClientSecret"];
             var redirectUri = _configuration["Auth0:RedirectUri"];
-
+            var audience = "https://test"
             var tokenEndpoint = $"https://{domain}/oauth/token";
 
             var requestBody = new
@@ -76,7 +76,8 @@ namespace CustomReverseProxy.Controllers
                 client_id = clientId,
                 client_secret = clientSecret,
                 code = code,
-                redirect_uri = redirectUri
+                redirect_uri = redirectUri,
+                audience = audience
             };
 
             var requestContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
