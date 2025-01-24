@@ -70,7 +70,7 @@ namespace CustomReverseProxy.Controllers
             var clientId = _configuration["Auth0:ClientId"];
             var clientSecret = _configuration["Auth0:ClientSecret"];
             var redirectUri = _configuration["Auth0:RedirectUri"];
-            var audience = "https://test";
+            var Audience = "https://test";
             var tokenEndpoint = $"https://{domain}/oauth/token";
 
             var requestBody = new
@@ -80,7 +80,7 @@ namespace CustomReverseProxy.Controllers
                 client_secret = clientSecret,
                 code = code,
                 redirect_uri = redirectUri,
-                audience = audience
+                audience = Audience
             };
 
             var requestContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
@@ -102,7 +102,17 @@ namespace CustomReverseProxy.Controllers
                 return JsonSerializer.Deserialize<TokenResponse>(responseBody);
             }
             */
-            return JsonSerializer.Deserialize<TokenResponse>(responseBody);
+            var formattedResponse = JsonSerializer.Deserialize<TokenResponse>(responseBody);
+            if(formattedResponse.Access_Token == null)
+            {
+                Console.WriteLine("No access token in response");
+            }
+            Console.WriteLine(formattedResponse.Access_Token);
+            Console.WriteLine(formattedResponse.Id_Token);
+            Console.WriteLine(formattedResponse.Scope);
+            Console.WriteLine(formattedResponse.Expires_In);
+            Console.WriteLine(formattedResponse.Token_Type);
+            return formattedResponse;
         }
 /*
         private ClaimsPrincipal BuildClaimsPrincipal(string tokenResponse)
