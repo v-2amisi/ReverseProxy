@@ -102,6 +102,7 @@ namespace CustomReverseProxy.Controllers
                 return JsonSerializer.Deserialize<TokenResponse>(responseBody);
             }
             */
+            Console.WriteLine(responseBody);
             var formattedResponse = JsonSerializer.Deserialize<TokenResponse>(responseBody);
             if(formattedResponse.Access_Token == null)
             {
