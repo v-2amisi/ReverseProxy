@@ -46,6 +46,9 @@ namespace CustomReverseProxy.Controllers
                 // Process the access token for authorization purposes if needed
                 var accessToken = tokenResponse.Access_Token;
 
+                Console.WriteLine(idToken);
+                Console.WriteLine(accessToken);
+
                 // Save tokens to session or cookie
                 HttpContext.Session.SetString("id_token", idToken);
                 HttpContext.Session.SetString("access_token", accessToken);
