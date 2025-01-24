@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
 using System.Text.Json;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
@@ -103,7 +104,7 @@ namespace CustomReverseProxy.Controllers
             }
             */
             Console.WriteLine(responseBody);
-            var formattedResponse = JsonSerializer.Deserialize<TokenResponse>(responseBody);
+            var formattedResponse = JsonConvert.DeserializeObject<TokenResponse>(responseBody);
             if(formattedResponse.Access_Token == null)
             {
                 Console.WriteLine("No access token in response");
