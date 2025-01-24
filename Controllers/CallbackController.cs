@@ -84,7 +84,7 @@ namespace CustomReverseProxy.Controllers
                 audience = Audience
             };
 
-            var requestContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+            var requestContent = new StringContent(System.Text.Json.JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
             var response = await client.PostAsync(tokenEndpoint, requestContent);
 
@@ -104,7 +104,7 @@ namespace CustomReverseProxy.Controllers
             }
             */
             Console.WriteLine(responseBody);
-            var formattedResponse = JsonConvert.DeserializeObject<TokenResponse>(responseBody);
+            var formattedResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenResponse>(responseBody);
             if(formattedResponse.Access_Token == null)
             {
                 Console.WriteLine("No access token in response");
