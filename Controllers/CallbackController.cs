@@ -47,7 +47,7 @@ namespace CustomReverseProxy.Controllers
                 HttpContext.Session.SetString("access_token", accessToken);
 
                 // Redirect to home or any protected resource
-                return RedirectToAction(/app1);
+                return Redirect("/app1");
             }
             catch (Exception ex)
             {
