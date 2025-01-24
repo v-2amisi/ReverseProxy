@@ -58,8 +58,8 @@ namespace CustomReverseProxy
             	options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
             	options.Audience = "https://test";
 				options.RequireHttpsMetadata = true;
-        	})
-			.AddAuthorization(options =>
+        	});
+			services.AddAuthorization(options =>
 			{
 				options.AddPolicy("AuthenticatedUsers", policy =>
 				{
