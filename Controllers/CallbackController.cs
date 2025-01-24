@@ -94,7 +94,7 @@ namespace CustomReverseProxy.Controllers
                 HttpContext.Response.ContentType = "text/plain";
                 await HttpContext.Response.WriteAsync(responseBody);
 
-                return new EmptyResult();
+                return JsonSerializer.Deserialize<TokenResponse>(responseBody);
             }
             return JsonSerializer.Deserialize<TokenResponse>(responseBody);
         }
