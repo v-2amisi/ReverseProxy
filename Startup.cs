@@ -48,7 +48,14 @@ namespace CustomReverseProxy
             	options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
             	options.Audience = "https://test";
 				options.RequireHttpsMetadata = true;
-        	});
+        	})
+			.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromMinutes(30); // Set timeout period
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			})
+			.AddDistributedMemoryCache();
 
 		services
 			.AddAuthorization(options =>
@@ -78,6 +85,7 @@ namespace CustomReverseProxy
 
 			app.UseMiddleware<AuthenticationMiddleware>();
 			app.UseMiddleware<ReverseProxyMiddleware>();
+			app.UseSession();
 			app.UseEndpoints(endpoints => 
 			{
 				endpoints.MapControllers();
