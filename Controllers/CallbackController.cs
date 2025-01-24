@@ -91,7 +91,10 @@ namespace CustomReverseProxy.Controllers
             var responseBody = await response.Content.ReadAsStringAsync();
             if(responseBody != null)
             {
-                return StatusCode(500, $"Callback processing error: {responseBody.IdToken}");
+                HttpContext.Response.ContentType = "text/plain";
+                await HttpContext.Response.WriteAsync(responseBody);
+
+                return new EmptyResult();
             }
             return JsonSerializer.Deserialize<TokenResponse>(responseBody);
         }
