@@ -41,10 +41,10 @@ namespace CustomReverseProxy.Controllers
                 }
 
                 // Decode and process the ID Token if needed
-                var idToken = tokenResponse.IdToken;
+                var idToken = tokenResponse.Id_Token;
 
                 // Process the access token for authorization purposes if needed
-                var accessToken = tokenResponse.AccessToken;
+                var accessToken = tokenResponse.Access_Token;
 
                 // Save tokens to session or cookie
                 HttpContext.Session.SetString("id_token", idToken);
@@ -89,6 +89,7 @@ namespace CustomReverseProxy.Controllers
             }
 
             var responseBody = await response.Content.ReadAsStringAsync();
+            /*
             if(responseBody != null)
             {
                 HttpContext.Response.ContentType = "text/plain";
@@ -96,6 +97,7 @@ namespace CustomReverseProxy.Controllers
 
                 return JsonSerializer.Deserialize<TokenResponse>(responseBody);
             }
+            */
             return JsonSerializer.Deserialize<TokenResponse>(responseBody);
         }
 /*
@@ -110,11 +112,11 @@ namespace CustomReverseProxy.Controllers
 
     public class TokenResponse
     {
-        public string AccessToken { get; set; }
-        public string IdToken { get; set; }
-        public string RefreshToken { get; set; }
-        public string TokenType { get; set; }
-        public int ExpiresIn { get; set; }
+        public string Access_Token { get; set; }
+        public string Id_Token { get; set; }
+        public string Scope { get; set; }
+        public int Expires_In { get; set; }
+        public string Token_Type { get; set; }
     }
 }
 
