@@ -129,7 +129,7 @@ namespace CustomReverseProxy.Middlewares
             {
                 return new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
             }
-            if (context.request.Path.StartsWithSegments("/app2"))
+            if (context.Request.Path.StartsWithSegments("/app2"))
             {
                 return new Uri("http://ec2-54-82-60-31.compute-1.amazonaws.com:5000");
             }
