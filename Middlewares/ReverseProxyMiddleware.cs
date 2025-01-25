@@ -16,9 +16,9 @@ namespace CustomReverseProxy.Middlewares
         private readonly RequestDelegate _nextMiddleware;
         //private readonly string _oidcCallbackPath = "/callback";
 
-        public ReverseProxyMiddleware(RequestDelegate nextMiddleware)
+        public ReverseProxyMiddleware(RequestDelegate next)
         {
-            _nextMiddleware = nextMiddleware;
+            _next = next;
         }
 
         public async Task Invoke(HttpContext context)
@@ -42,7 +42,7 @@ namespace CustomReverseProxy.Middlewares
                 return;
             }
 
-            await _nextMiddleware(context);
+            await _next(context);
         }
 /*
         private async Task HandleOidcCallbackAsync(HttpContext context)
