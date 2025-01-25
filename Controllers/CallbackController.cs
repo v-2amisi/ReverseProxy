@@ -68,7 +68,7 @@ namespace CustomReverseProxy.Controllers
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 
 
-                foreach (identity in claimsPrincipal.Identities)
+                foreach (var identity in claimsPrincipal.Identities)
                 {
                     Console.WriteLine($"Authentication Type: {identity.AuthenticationType}");
                     Console.WriteLine($"Is Authenticated: {identity.IsAuthenticated}");
