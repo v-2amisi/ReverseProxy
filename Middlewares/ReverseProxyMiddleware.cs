@@ -13,7 +13,7 @@ namespace CustomReverseProxy.Middlewares
     public class ReverseProxyMiddleware
     {
         private static readonly HttpClient _httpClient = new HttpClient();
-        private readonly RequestDelegate _nextMiddleware;
+        private readonly RequestDelegate _next;
         //private readonly string _oidcCallbackPath = "/callback";
 
         public ReverseProxyMiddleware(RequestDelegate next)
