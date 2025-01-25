@@ -23,7 +23,7 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            var targetUri = BuildTargetUri(context.Request);
+            var targetUri = BuildTargetUri(context);
 
             if (targetUri != null)
             {
@@ -121,14 +121,14 @@ namespace CustomReverseProxy.Middlewares
             return requestMessage;
         }
 
-        private Uri BuildTargetUri(HttpRequest request)
+        private Uri BuildTargetUri(HttpContext context)
         {
             // Configure routing to backend applications
-            if (request.Path.StartsWithSegments("/app1"))
+            if (context.request.Path.StartsWithSegments("/app1"))
             {
                 return new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
             }
-            if (request.Path.StartsWithSegments("/app2"))
+            if (context.request.Path.StartsWithSegments("/app2"))
             {
                 return new Uri("http://ec2-54-82-60-31.compute-1.amazonaws.com:5000");
             }
