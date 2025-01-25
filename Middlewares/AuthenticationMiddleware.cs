@@ -31,7 +31,7 @@ namespace CustomReverseProxy.Middlewares
                 var redirectUri = $"{_appSettings.RedirectUri}";
                 var clientId = $"{_appSettings.ClientId}";
                 var domain = $"{_appSettings.Domain}";
-                var scope = "openid read:appointments";
+                var scope = "openid profile read:appointments";
                 context.Response.Redirect($"https://{domain}/authorize?client_id={clientId}&response_type=code&scope={scope}&redirect_uri={redirectUri}&state=12345");
                 return;
             }
