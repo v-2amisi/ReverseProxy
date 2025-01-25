@@ -63,7 +63,10 @@ namespace CustomReverseProxy.Controllers
                 
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
+                Console.WriteLine(claimsIdentity);
+                
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                Console.WriteLine(claimsPrincipal);
 
                 HttpContext.User = claimsPrincipal;
 
