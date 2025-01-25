@@ -56,7 +56,7 @@ namespace CustomReverseProxy.Controllers
                 Console.WriteLine(jwtToken.Claims);
                 //Console.WriteLine(jwtToken.ClaimsIdentity);
                 //var claims = jwtToken.Claims.ToList();
-                var claims = jwtToken.Claims
+                var claims = jwtToken.Claims;
                 foreach (var claim in jwtToken.Claims)
                 {
                     Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
