@@ -56,6 +56,7 @@ namespace CustomReverseProxy.Controllers
                 Console.WriteLine(jwtToken.Claims);
                 //Console.WriteLine(jwtToken.ClaimsIdentity);
                 var claims = jwtToken.Claims.ToList();
+                Console.WriteLine(claims);
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
