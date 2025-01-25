@@ -63,10 +63,17 @@ namespace CustomReverseProxy.Controllers
                 
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
-                Console.WriteLine(claimsIdentity);
+                
                 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                Console.WriteLine(claimsPrincipal);
+                
+
+                foreach (identity in claimsPrincipal.Identities)
+                {
+                    Console.WriteLine($"Authentication Type: {identity.AuthenticationType}");
+                    Console.WriteLine($"Is Authenticated: {identity.IsAuthenticated}");
+                    Console.WriteLine($"Name: {identity.Name}");
+                }
 
                 HttpContext.User = claimsPrincipal;
 
