@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace CustomReverseProxy.Controllers
 {
@@ -46,6 +47,15 @@ namespace CustomReverseProxy.Controllers
 
                 // Process the access token for authorization purposes if needed
                 var accessToken = tokenResponse.Access_Token;
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(idToken);
+                var claims = jwtToken.Claims.ToList();
+
+                var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+                HttpContext.User = claimsPrincipal;
 
                 Console.WriteLine(idToken);
                 Console.WriteLine(accessToken);
