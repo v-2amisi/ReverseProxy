@@ -73,7 +73,7 @@ namespace CustomReverseProxy.Controllers
                 {
                     Console.WriteLine($"Authentication Type: {identity.AuthenticationType}");
                     Console.WriteLine($"Is Authenticated: {identity.IsAuthenticated}");
-                    Console.WriteLine($"Name: {identity.name}");
+                    //Console.WriteLine($"Name: {identity.name}");
                 }
 
                 HttpContext.User = claimsPrincipal;

@@ -124,7 +124,8 @@ namespace CustomReverseProxy.Middlewares
         private Uri BuildTargetUri(HttpContext context)
         {
             // Configure routing to backend applications
-            if (context.request.Path.StartsWithSegments("/app1"))
+            
+            if (context.Request.Path.StartsWithSegments("/app1"))
             {
                 return new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
             }
