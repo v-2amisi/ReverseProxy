@@ -79,8 +79,8 @@ namespace CustomReverseProxy.Controllers
                 HttpContext.User = claimsPrincipal;
 
                 Console.WriteLine(HttpContext.User.Identity.IsAuthenticated);
-                Console.WriteLine(idToken);
-                Console.WriteLine(accessToken);
+                //Console.WriteLine(idToken);
+                //Console.WriteLine(accessToken);
 
                 // Save tokens to session or cookie
                 HttpContext.Session.SetString("id_token", idToken);
@@ -135,17 +135,17 @@ namespace CustomReverseProxy.Controllers
                 return JsonSerializer.Deserialize<TokenResponse>(responseBody);
             }
             */
-            Console.WriteLine(responseBody);
+            //Console.WriteLine(responseBody);
             var formattedResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenResponse>(responseBody);
             if(formattedResponse.Access_Token == null)
             {
                 Console.WriteLine("No access token in response");
             }
-            Console.WriteLine(formattedResponse.Access_Token);
-            Console.WriteLine(formattedResponse.Id_Token);
-            Console.WriteLine(formattedResponse.Scope);
-            Console.WriteLine(formattedResponse.Expires_In);
-            Console.WriteLine(formattedResponse.Token_Type);
+            //Console.WriteLine(formattedResponse.Access_Token);
+            //Console.WriteLine(formattedResponse.Id_Token);
+            //Console.WriteLine(formattedResponse.Scope);
+            //Console.WriteLine(formattedResponse.Expires_In);
+            //Console.WriteLine(formattedResponse.Token_Type);
             return formattedResponse;
         }
 /*

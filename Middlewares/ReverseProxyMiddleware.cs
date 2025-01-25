@@ -23,15 +23,19 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+            Console.WriteLine("Calling build target uri");
+            Console.WriteLine(context.User.Identity.IsAuthenticated);
             var targetUri = BuildTargetUri(context);
 
             if (targetUri != null)
             {
+                Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
                 var targetRequestMessage = CreateTargetMessage(context, targetUri);
 
                 using (var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted))
                 {
                     context.Response.StatusCode = (int)responseMessage.StatusCode;
+                    Console.WriteLine($"Calling copy from target resp headers: {context.User.Identity.IsAuthenticated}");
                     CopyFromTargetResponseHeaders(context, responseMessage);
                     await responseMessage.Content.CopyToAsync(context.Response.Body);
                 }
@@ -117,7 +121,7 @@ namespace CustomReverseProxy.Middlewares
                     requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
                 }
             }
-
+            Console.WriteLine($"Target message built: {context.User.Identity.IsAuthenticated}");
             return requestMessage;
         }
 
@@ -127,6 +131,8 @@ namespace CustomReverseProxy.Middlewares
             
             if (context.Request.Path.StartsWithSegments("/app1"))
             {
+                Console.WriteLine("TargetUri: https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
+                Console.WriteLine(context.User.Identity.IsAuthenticated);
                 return new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
             }
             if (context.Request.Path.StartsWithSegments("/app2"))
@@ -148,7 +154,7 @@ namespace CustomReverseProxy.Middlewares
             {
                 context.Response.Headers[header.Key] = header.Value.ToArray();
             }
-
+            Console.WriteLine($"copied target response headers: {context.User.Identity.IsAuthenticated}");
             context.Response.Headers.Remove("transfer-encoding");
         }
     }
