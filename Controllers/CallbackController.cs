@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 
 namespace CustomReverseProxy.Controllers
 {
