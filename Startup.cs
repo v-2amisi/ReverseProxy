@@ -46,13 +46,12 @@ namespace CustomReverseProxy
 		services.AddDistributedMemoryCache();
 		
 		services
-			.AddAuthentication(options =>
-        	{
-            	options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-				options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        	})
-			.AddCookie()
+			.AddAuthentication("Cookies")
+			.AddCookie("Cookies", options =>
+			{
+				options.LoginPath = "/auth/login";   // Ensure login redirects correctly
+				options.LogoutPath = "/auth/logout";
+			});
 			.AddJwtBearer(options =>
         	{	
             	options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
@@ -82,6 +81,7 @@ namespace CustomReverseProxy
             // app.UseMiddleware<ReverseProxyMiddleware>();
 
 			app.UseRouting();
+			app.UseSession();
 			app.UseAuthentication();
 			app.UseAuthorization();
 
@@ -91,7 +91,7 @@ namespace CustomReverseProxy
 			//app.UseMiddleware<AuthenticationMiddleware>();
 			//app.UseAuthentication();
 			//app.UseAuthorization();
-			app.UseSession();
+			//app.UseSession();
 			app.UseEndpoints(endpoints => 
 			{
 				endpoints.MapControllers();

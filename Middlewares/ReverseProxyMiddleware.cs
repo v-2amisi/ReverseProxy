@@ -23,9 +23,15 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+            if (!context.Session.IsAvailable)
+            {
+                await _next(context);
+                return;
+            }
+            
             string requestedUrl = context.Request.Path;
 
-        // Step 1: Determine if authentication is needed
+            // Step 1: Determine if authentication is needed
             if (IsProtectedRoute(requestedUrl) && !context.User.Identity.IsAuthenticated){
                 //string returnUrl = context.Request.Path + context.Request.QueryString;
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
