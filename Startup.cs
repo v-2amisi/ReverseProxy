@@ -52,6 +52,7 @@ namespace CustomReverseProxy
 				options.LoginPath = "/auth/login";   // Ensure login redirects correctly
 				options.LogoutPath = "/auth/logout";
 			});
+		services
 			.AddJwtBearer(options =>
         	{	
             	options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
