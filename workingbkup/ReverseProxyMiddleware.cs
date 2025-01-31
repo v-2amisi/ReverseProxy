@@ -34,6 +34,7 @@ namespace CustomReverseProxy
                 if (!await IsValidTokenAsync(context.Request))
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    Console.WriteLine("Bkup File: Unauthorized: Invalid or missing token.");
                     await context.Response.WriteAsync("Unauthorized: Invalid or missing token.");
                     return;
                 }
