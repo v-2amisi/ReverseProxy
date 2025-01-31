@@ -23,6 +23,30 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+        string requestedUrl = context.Request.Path;
+
+        // Step 1: Determine if authentication is needed
+        if (IsProtectedRoute(requestedUrl) && !context.User.Identity.IsAuthenticated)
+        {
+            string returnUrl = context.Request.Path + context.Request.QueryString;
+            context.Session.SetString("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
+            
+            // Redirect user to Authentication Middleware (/auth/login)
+            context.Response.Redirect($"/auth/login?redirect_uri={returnUrl}");
+            return;
+        }
+
+        await _next(context);
+    }
+
+    private bool IsProtectedRoute(string url)
+    {
+        return url.StartsWith("/app1");
+    }
+    /*
+
+        public async Task Invoke(HttpContext context)
+        {
             Console.WriteLine("Calling build target uri");
             Console.WriteLine(context.User.Identity.IsAuthenticated);
             var targetUri = BuildTargetUri(context);
@@ -105,6 +129,7 @@ namespace CustomReverseProxy.Middlewares
             return null;
         }
 */
+/*
         private HttpRequestMessage CreateTargetMessage(HttpContext context, Uri targetUri)
         {
             var requestMessage = new HttpRequestMessage
@@ -158,6 +183,7 @@ namespace CustomReverseProxy.Middlewares
             context.Response.Headers.Remove("transfer-encoding");
         }
     }
+*/
 /*
     public class TokenResponse
     {
