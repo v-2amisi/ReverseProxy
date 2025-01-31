@@ -52,14 +52,15 @@ namespace CustomReverseProxy
 				options.LoginPath = "/auth/login";   // Ensure login redirects correctly
 				options.LogoutPath = "/auth/logout";
 			});
-		services
+		/*services
 			.AddJwtBearer(options =>
         	{	
             	options.Authority = "https://dev-vrk5vwulx3wfsclz.us.auth0.com/";
             	options.Audience = "https://test";
 				options.RequireHttpsMetadata = true;
-        	});
-			services.AddAuthorization(options =>
+        	});*/
+		services
+			.AddAuthorization(options =>
 			{
 				options.AddPolicy("AuthenticatedUsers", policy =>
 				{
