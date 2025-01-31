@@ -23,26 +23,25 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-        string requestedUrl = context.Request.Path;
+            string requestedUrl = context.Request.Path;
 
         // Step 1: Determine if authentication is needed
-        if (IsProtectedRoute(requestedUrl) && !context.User.Identity.IsAuthenticated)
-        {
-            string returnUrl = context.Request.Path + context.Request.QueryString;
-            context.Session.SetString("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
-            
-            // Redirect user to Authentication Middleware (/auth/login)
-            context.Response.Redirect($"/auth/login?redirect_uri={returnUrl}");
-            return;
+            if (IsProtectedRoute(requestedUrl) && !context.User.Identity.IsAuthenticated){
+                string returnUrl = context.Request.Path + context.Request.QueryString;
+                context.Session.SetString("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
+                
+                // Redirect user to Authentication Middleware (/auth/login)
+                context.Response.Redirect($"/auth/login?redirect_uri={returnUrl}");
+                return;
+            }
+
+            await _next(context);
         }
 
-        await _next(context);
-    }
-
-    private bool IsProtectedRoute(string url)
-    {
-        return url.StartsWith("/app1");
-    }
+        private bool IsProtectedRoute(string url)
+        {
+            return url.StartsWith("/app1");
+        }
     /*
 
         public async Task Invoke(HttpContext context)
@@ -191,5 +190,6 @@ namespace CustomReverseProxy.Middlewares
         public string IdToken { get; set; }
     }
 */
+    }
 }
 
