@@ -82,13 +82,15 @@ namespace CustomReverseProxy
             // app.UseMiddleware<ReverseProxyMiddleware>();
 
 			app.UseRouting();
-			app.UseAuthentication();
-			app.UseAuthorization();
+			//app.UseAuthentication();
+			//app.UseAuthorization();
 
 			//app.UseMiddleware<AuthenticationMiddleware>();
 			app.UseMiddleware<ReverseProxyMiddleware>();
 			app.UseMiddleware<AuthenticationMiddleware>();
 			//app.UseMiddleware<AuthenticationMiddleware>();
+			//app.UseAuthentication();
+			app.UseAuthorization();
 			app.UseSession();
 			app.UseEndpoints(endpoints => 
 			{
