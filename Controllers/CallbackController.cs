@@ -91,7 +91,7 @@ namespace CustomReverseProxy.Controllers
 
                 // Redirect to home or any protected resource
                 //return Redirect("/app1");
-                return Redirect("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001")
+                return Redirect("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
             }
             catch (Exception ex)
             {
