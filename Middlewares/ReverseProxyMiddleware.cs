@@ -23,6 +23,7 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+            Console.WriteLine("reverseproxy middleware: " + context.Session.IsAvailable);
             if (!context.Session.IsAvailable)
             {
                 await _next(context);

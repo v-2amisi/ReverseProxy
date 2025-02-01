@@ -52,15 +52,17 @@ namespace CustomReverseProxy.Controllers
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(idToken);
 
-                Console.WriteLine("Lets check jwtToken value");
-                Console.WriteLine(jwtToken.Claims);
+                //Console.WriteLine("Lets check jwtToken value");
+                //Console.WriteLine(jwtToken.Claims);
                 //Console.WriteLine(jwtToken.ClaimsIdentity);
                 //var claims = jwtToken.Claims.ToList();
                 var claims = jwtToken.Claims;
+                /*
                 foreach (var claim in jwtToken.Claims)
                 {
                     Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
                 }
+                */
                 
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
@@ -71,7 +73,7 @@ namespace CustomReverseProxy.Controllers
 
                 foreach (var identity in claimsPrincipal.Identities)
                 {
-                    Console.WriteLine($"Authentication Type: {identity.AuthenticationType}");
+                    Console.WriteLine($"CallbackControllerAuthentication Type: {identity.AuthenticationType}");
                     Console.WriteLine($"Is Authenticated: {identity.IsAuthenticated}");
                     //Console.WriteLine($"Name: {identity.name}");
                 }

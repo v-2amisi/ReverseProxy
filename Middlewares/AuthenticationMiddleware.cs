@@ -20,14 +20,15 @@ namespace CustomReverseProxy.Middlewares
         public async Task Invoke(HttpContext context)
         {
             // Check if the request needs authentication
-            Console.WriteLine(context.Request.Path);
-            Console.WriteLine(context.User.Identity.IsAuthenticated);
-            Console.WriteLine(_appSettings.ClientId);
-            Console.WriteLine(_appSettings.Domain);
+            //Console.WriteLine(context.Request.Path);
+            //Console.WriteLine(context.User.Identity.IsAuthenticated);
+            //Console.WriteLine(_appSettings.ClientId);
+            //Console.WriteLine(_appSettings.Domain);
             if (context.Request.Path.StartsWithSegments("/auth/login") &&
                 !context.User.Identity.IsAuthenticated)
             {
                 string returnUrl = context.Request.Query["redirect_uri"];
+                Console.WriteLine("Auth Middleware, redirect URI: " + returnUrl);
                 if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
                 // Redirect to Auth0 for authentication
                 var redirectUri = $"{_appSettings.RedirectUri}";
