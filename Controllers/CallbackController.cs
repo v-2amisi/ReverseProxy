@@ -80,7 +80,7 @@ namespace CustomReverseProxy.Controllers
 
                 HttpContext.User = claimsPrincipal;
 
-                Console.WriteLine(HttpContext.User.Identity.IsAuthenticated);
+                //Console.WriteLine(HttpContext.User.Identity.IsAuthenticated);
                 //Console.WriteLine(idToken);
                 //Console.WriteLine(accessToken);
 
