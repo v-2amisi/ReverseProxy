@@ -90,7 +90,8 @@ namespace CustomReverseProxy.Controllers
                 HttpContext.Session.SetString("IsAuthenticated", HttpContext.User.Identity.IsAuthenticated.ToString());
 
                 // Redirect to home or any protected resource
-                return Redirect("/app1");
+                //return Redirect("/app1");
+                return Redirect("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001")
             }
             catch (Exception ex)
             {
