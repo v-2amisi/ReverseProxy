@@ -24,7 +24,7 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             //Console.WriteLine(_appSettings.ClientId);
             //Console.WriteLine(_appSettings.Domain);
-            Console.WriteLine("Auth Middleware Is Authenticated: " + context.User.Identity.IsAuthenticated);
+            Console.WriteLine("Auth Middleware Is Authenticated: " + context.Session.GetString("IsAuthenticated"));
             if (context.Request.Path.StartsWithSegments("/auth/login"))
             {
                 string returnUrl = context.Request.Query["redirect_uri"];
