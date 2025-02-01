@@ -34,6 +34,7 @@ namespace CustomReverseProxy.Middlewares
 
             // Step 1: Determine if authentication is needed
             Console.WriteLine("reverseproxy middleware isauthenticated: " + context.User.Identity.IsAuthenticated);
+            Console.WriteLine("context.Session.GetString("IsAuthenticated"): " + context.Session.GetString("IsAuthenticated"));
             string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
             if (IsProtectedRoute(requestedUrl) && (context.Session.GetString("IsAuthenticated") == "False")){
                 //string returnUrl = context.Request.Path + context.Request.QueryString;
