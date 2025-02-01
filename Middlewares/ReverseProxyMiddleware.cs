@@ -46,7 +46,7 @@ namespace CustomReverseProxy.Middlewares
             }
             else
             {
-                context.response.Redirect(returnUrl);
+                context.Response.Redirect(returnUrl);
             }
 
             await _next(context);
