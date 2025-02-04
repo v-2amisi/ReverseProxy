@@ -106,7 +106,7 @@ namespace CustomReverseProxy.Middlewares
         {
             // Configure routing to backend applications
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
-            var requestedPath = context.Request.Path;
+            Uri requestedPath = context.Request.Path;
 
             if (IsProtectedRoute(requestedPath))
             {
