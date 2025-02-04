@@ -37,7 +37,7 @@ namespace CustomReverseProxy.Middlewares
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             //Console.WriteLine("Calling build target uri");
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
-            var (targetUri, bool isRedirect) = BuildTargetUri(context);
+            var (targetUri, isRedirect) = BuildTargetUri(context);
             //string requestedUrl = context.Request.Path;
             //Console.WriteLine(targetUri.ToString());
             //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
@@ -105,7 +105,7 @@ namespace CustomReverseProxy.Middlewares
         private Uri BuildTargetUri(HttpContext context)
         {
             // Configure routing to backend applications
-            #bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
+            //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             requestedPath = context.Request.Path;
 
             if (IsProtectedRoute(requestedPath))
