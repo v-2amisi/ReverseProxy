@@ -39,7 +39,7 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             var (targetUri, isRedirect) = BuildTargetUri(context);
             Console.WriteLine(targetUri);
-            if(targetUri.AbsolutePath == "/") return;
+            //if(targetUri.AbsolutePath == "/") return;
             //string requestedUrl = context.Request.Path;
             //Console.WriteLine(targetUri.ToString());
             //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
@@ -116,7 +116,7 @@ namespace CustomReverseProxy.Middlewares
             {
                 bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
-                if(isAuthenticated){
+                if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
                 
                     // Redirect user to Authentication Middleware (/auth/login)
