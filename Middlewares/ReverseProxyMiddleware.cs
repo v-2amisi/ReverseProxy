@@ -120,26 +120,26 @@ namespace CustomReverseProxy.Middlewares
                     context.Session.SetString("returnUrl", returnUrl);
                 
                     // Redirect user to Authentication Middleware (/auth/login)
-                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), true);
+                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), "true" == "true");
                 }
                 else {
-                    return (new Uri(returnUrl), false);
+                    return (new Uri(returnUrl), "true" == "false");
                 }
                 
             }
             
             if (requestedPath.StartsWithSegments("/app2") || requestedPath.StartsWithSegments("/app1"))
             {
-                return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), false);
+                return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), "true" == "false");
             }
 
             if (requestedPath.StartsWithSegments("/callback"))
             {
-                return (new Uri(requestedPath), true);
+                return (new Uri(requestedPath), "true" == "true");
             }
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
             //{
-                return (new Uri(requestedPath), false);
+                return (new Uri(requestedPath), "true" == "false");
             //}
 
             //return null;
