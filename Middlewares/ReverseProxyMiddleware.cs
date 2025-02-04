@@ -106,7 +106,7 @@ namespace CustomReverseProxy.Middlewares
         {
             // Configure routing to backend applications
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
-            Uri requestedPath = context.Request.Path;
+            var requestedPath = context.Request.Path;
 
             if (IsProtectedRoute(requestedPath))
             {
@@ -131,11 +131,11 @@ namespace CustomReverseProxy.Middlewares
 
             if (requestedPath.StartsWithSegments("/callback"))
             {
-                return (requestedPath, true);
+                return (new Uri(requestedPath), true);
             }
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
             //{
-                return (requestedPath, false);
+                return (new Uri(requestedPath), false);
             //}
 
             //return null;
