@@ -38,6 +38,8 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine("Calling build target uri");
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             var (targetUri, isRedirect) = BuildTargetUri(context);
+            Console.WriteLine(targetUri);
+            if(targetUri.AbsolutePath == "/") return;
             //string requestedUrl = context.Request.Path;
             //Console.WriteLine(targetUri.ToString());
             //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
