@@ -89,6 +89,8 @@ namespace CustomReverseProxy.Middlewares
                 
                 // Redirect user to Authentication Middleware (/auth/login)
                 context.Response.Redirect($"/auth/login?redirect_uri={returnUrl}");
+
+                await _next(context);
                 
             }
             else
