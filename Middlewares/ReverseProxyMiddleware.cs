@@ -39,7 +39,7 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             var targetUri = BuildTargetUri(context);
 
-            if (targetUri != null && !targetUri.ToString().StartsWith("/auth/login"))
+            if (targetUri != null && !targetUri.ToString().Contains("/auth/login"))
             {
                 Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
                 var targetRequestMessage = CreateTargetMessage(context, targetUri);
@@ -52,6 +52,11 @@ namespace CustomReverseProxy.Middlewares
                     await responseMessage.Content.CopyToAsync(context.Response.Body);
                 }
                 return;
+            }
+            else
+            {
+                var loginRedirectPath = targetUri.AbsolutePath + targetUri.Query;
+                context.Response.Redirect(loginRedirectPath);
             }
 
             await _next(context);
@@ -88,9 +93,9 @@ namespace CustomReverseProxy.Middlewares
                 context.Session.SetString("returnUrl", returnUrl);
                 
                 // Redirect user to Authentication Middleware (/auth/login)
-                context.Response.Redirect($"/auth/login?redirect_uri={returnUrl}");
+                return new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}");
 
-                await _next(context);
+                //await _next(context);
                 
             }
             else
