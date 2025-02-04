@@ -87,6 +87,7 @@ namespace CustomReverseProxy.Controllers
                 // Save tokens to session or cookie
                 HttpContext.Session.SetString("id_token", idToken);
                 HttpContext.Session.SetString("access_token", accessToken);
+                Console.WriteLine("HttpContext.User.Identity.IsAuthenticated.ToString(): " + HttpContext.User.Identity.IsAuthenticated.ToString());
                 HttpContext.Session.SetString("IsAuthenticated", HttpContext.User.Identity.IsAuthenticated.ToString());
 
                 // Redirect to home or any protected resource

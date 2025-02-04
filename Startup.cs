@@ -60,13 +60,7 @@ namespace CustomReverseProxy
 				options.RequireHttpsMetadata = true;
         	});*/
 		services
-			.AddAuthorization(options =>
-			{
-				options.AddPolicy("AuthenticatedUsers", policy =>
-				{
-					policy.RequireAuthenticatedUser();
-				});
-			});
+			.AddAuthorization();
 
 
 		//services.AddHttpClient("BackendProxy");
