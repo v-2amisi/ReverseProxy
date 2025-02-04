@@ -77,19 +77,19 @@ namespace CustomReverseProxy
             // app.UseMiddleware<ReverseProxyMiddleware>();
 
 			app.UseRouting();
-			Console.WriteLine("Routing middleware returned");
+			//Console.WriteLine("Routing middleware returned");
 			app.UseSession();
-			Console.WriteLine("Session middleware returned");
+			//Console.WriteLine("Session middleware returned");
 			app.UseAuthentication();
-			Console.WriteLine("Built-in auth middleware returned");
+			//Console.WriteLine("Built-in auth middleware returned");
 			app.UseAuthorization();
-			Console.WriteLine("AuthZ middleware returned");
+			//Console.WriteLine("AuthZ middleware returned");
 
-			//app.UseMiddleware<AuthenticationMiddleware>();
-			app.UseMiddleware<ReverseProxyMiddleware>();
-			Console.WriteLine("Reverse Proxy middleware returned");
 			app.UseMiddleware<AuthenticationMiddleware>();
-			Console.WriteLine("Custom AuthN middleware returned");
+			app.UseMiddleware<ReverseProxyMiddleware>();
+			//Console.WriteLine("Reverse Proxy middleware returned");
+			app.UseMiddleware<AuthenticationMiddleware>();
+			//Console.WriteLine("Custom AuthN middleware returned");
 			//app.UseMiddleware<AuthenticationMiddleware>();
 			//app.UseAuthentication();
 			//app.UseAuthorization();
