@@ -75,10 +75,10 @@ namespace CustomReverseProxy.Middlewares
             await _next(context);
         }
 
-        private bool IsProtectedRoute(string url, context)
+        private bool IsProtectedRoute(string url)
         {
-            bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
-            return url.StartsWith("/app1") || isAuthenticated;
+            //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
+            return url.StartsWith("/app1");
         }
 
 
@@ -108,15 +108,19 @@ namespace CustomReverseProxy.Middlewares
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             requestedPath = context.Request.Path;
 
-            if (IsProtectedRoute(requestedPath, context))
+            if (IsProtectedRoute(requestedPath))
             {
+                bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
-                context.Session.SetString("returnUrl", returnUrl);
+                if(isAuthenticated){
+                    context.Session.SetString("returnUrl", returnUrl);
                 
-                // Redirect user to Authentication Middleware (/auth/login)
-                return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), true);
-
-                //await _next(context);
+                    // Redirect user to Authentication Middleware (/auth/login)
+                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), true);
+                }
+                else {
+                    return (new Uri(returnUrl), false);
+                }
                 
             }
             
