@@ -38,7 +38,8 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine("Calling build target uri");
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             var (targetUri, isRedirect) = BuildTargetUri(context);
-            Console.WriteLine(targetUri);
+            Console.WriteLine("Build targeturi returned: " + targetUri);
+            Console.WriteLine("Build targeturi returned isRedirect as: " + isRedirect);
             //if(targetUri.AbsolutePath == "/") return;
             //string requestedUrl = context.Request.Path;
             //Console.WriteLine(targetUri.ToString());
@@ -118,7 +119,7 @@ namespace CustomReverseProxy.Middlewares
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
-                
+                Console.WriteLine("Getting redirected to authentication endpoint /auth/login");
                     // Redirect user to Authentication Middleware (/auth/login)
                     return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), "true" == "true");
                 }
