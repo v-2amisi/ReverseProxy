@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using CustomReverseProxy.Models;
 using System;
+using System.Web;
 
 namespace CustomReverseProxy.Middlewares
 {
@@ -30,7 +31,7 @@ namespace CustomReverseProxy.Middlewares
             if (loginRequestPath.Contains("/auth/login", StringComparison.OrdinalIgnoreCase))
             {
                 var loginRequestPathUri = new Uri(loginRequestPath);
-                string returnUrl = loginRequestPathUri.Query["redirect_uri"];
+                string returnUrl = HttpUtility.ParseQueryString(loginRequestPathUri.Query)["redirect_uri"];
                 Console.WriteLine("Auth Middleware, redirect URI: " + returnUrl);
                 if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
                 // Redirect to Auth0 for authentication
