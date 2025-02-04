@@ -46,7 +46,8 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
             if (isRedirect)
             {
-                var redirectPath = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+                var redirectPath = targetUri.Scheme + "://" + targetUri.Host + targetUri.AbsolutePath + targetUri.Query;
+                //var redirectPath = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
                 Console.WriteLine(redirectPath);
                 context.Response.Redirect(redirectPath);
                 return;
@@ -54,8 +55,8 @@ namespace CustomReverseProxy.Middlewares
             else
             {
                 Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
-                Console.WriteLine("backendTarget: " + context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query);
-                var backendTarget = new Uri(context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query);
+                Console.WriteLine("backendTarget: " + context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString);
+                var backendTarget = new Uri(context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString);
                 var targetRequestMessage = CreateTargetMessage(context, backendTarget);
 
                 using (var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted))
