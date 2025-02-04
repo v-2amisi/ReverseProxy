@@ -43,7 +43,7 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
             if (isRedirect)
             {
-                var redirectPath = targetUri.AbsolutePath + targetUri.Query;
+                var redirectPath = context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query;
                 Console.WriteLine(redirectPath);
                 context.Response.Redirect(redirectPath);
                 return;
@@ -51,7 +51,8 @@ namespace CustomReverseProxy.Middlewares
             else
             {
                 Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
-                var targetRequestMessage = CreateTargetMessage(context, targetUri);
+                var backendtarget = context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query;
+                var targetRequestMessage = CreateTargetMessage(context, backendtarget);
 
                 using (var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted))
                 {
