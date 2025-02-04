@@ -46,7 +46,7 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
             if (isRedirect)
             {
-                var redirectPath = targetUri.Scheme + "://" + targetUri.Host + targetUri.AbsolutePath + targetUri.Query;
+                var redirectPath = targetUri.Scheme + "://" + targetUri.Host + ":5443" + targetUri.AbsolutePath + targetUri.Query;
                 //var redirectPath = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
                 Console.WriteLine(redirectPath);
                 context.Response.Redirect(redirectPath);
