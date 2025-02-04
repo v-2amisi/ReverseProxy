@@ -26,9 +26,11 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(_appSettings.Domain);
             Console.WriteLine("Auth Middleware Is Authenticated: " + context.Session.GetString("IsAuthenticated"));
             Console.WriteLine("Auth middleware Path: " + context.Request.Path);
-            if (context.Request.Path.StartsWithSegments("/auth/login"))
+            var loginRequestPath = context.Response.Headers["Location"].ToString();
+            if (loginRequestPath.Contains("/auth/login", StringComparison.OrdinalIgnoreCase))
             {
-                string returnUrl = context.Request.Query["redirect_uri"];
+                var loginRequestPathUri = new Uri(loginRequestPath);
+                string returnUrl = loginRequestPathUri.Query["redirect_uri"];
                 Console.WriteLine("Auth Middleware, redirect URI: " + returnUrl);
                 if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
                 // Redirect to Auth0 for authentication
