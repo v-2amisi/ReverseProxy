@@ -57,7 +57,9 @@ namespace CustomReverseProxy.Middlewares
             else
             {
                 var loginRedirectPath = targetUri.AbsolutePath + targetUri.Query;
+                Console.WriteLine(loginRedirectPath);
                 context.Response.Redirect(loginRedirectPath);
+                return;
             }
 
             await _next(context);
