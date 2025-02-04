@@ -84,6 +84,7 @@ namespace CustomReverseProxy.Middlewares
             bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             if (context.Request.Path.StartsWithSegments("/app1") && !isAuthenticated)
             {
+                string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 context.Session.SetString("returnUrl", returnUrl);
                 
                 // Redirect user to Authentication Middleware (/auth/login)
