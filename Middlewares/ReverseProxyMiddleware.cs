@@ -51,7 +51,7 @@ namespace CustomReverseProxy.Middlewares
             else
             {
                 Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
-                Console.WriteLine("backendTarget: " + context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query)
+                Console.WriteLine("backendTarget: " + context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query);
                 var backendTarget = new Uri(context.Request.Scheme + "://" + context.Request.Host + targetUri.AbsolutePath + targetUri.Query);
                 var targetRequestMessage = CreateTargetMessage(context, backendTarget);
 
