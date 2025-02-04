@@ -39,7 +39,7 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             var targetUri = BuildTargetUri(context);
 
-            if (targetUri != null && !targetUri.StartsWith("/auth/login"))
+            if (targetUri != null && !targetUri.ToString().StartsWith("/auth/login"))
             {
                 Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
                 var targetRequestMessage = CreateTargetMessage(context, targetUri);
