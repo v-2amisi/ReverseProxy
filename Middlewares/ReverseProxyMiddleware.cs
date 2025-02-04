@@ -75,7 +75,7 @@ namespace CustomReverseProxy.Middlewares
             await _next(context);
         }
 
-        private bool IsProtectedRoute(string url)
+        private bool IsProtectedRoute(string url, context)
         {
             bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             return url.StartsWith("/app1") || isAuthenticated;
@@ -102,13 +102,13 @@ namespace CustomReverseProxy.Middlewares
             return requestMessage;
         }
 
-        private Uri BuildTargetUri(HttpContext context)
+        private (Uri, bool) BuildTargetUri(HttpContext context)
         {
             // Configure routing to backend applications
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             requestedPath = context.Request.Path;
 
-            if (IsProtectedRoute(requestedPath))
+            if (IsProtectedRoute(requestedPath, context))
             {
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 context.Session.SetString("returnUrl", returnUrl);
