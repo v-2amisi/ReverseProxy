@@ -31,16 +31,24 @@ namespace CustomReverseProxy.Middlewares
                 return;
             }
             
-            string requestedUrl = context.Request.Path;
+            //string requestedUrl = context.Request.Path;
 
             // Step 1: Determine if authentication is needed
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             //Console.WriteLine("Calling build target uri");
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
-            var targetUri = BuildTargetUri(context);
-            Console.WriteLine(targetUri.ToString());
-            Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
-            if (targetUri != null && !targetUri.ToString().Contains("/auth/login"))
+            var (targetUri, bool isRedirect) = BuildTargetUri(context);
+            //string requestedUrl = context.Request.Path;
+            //Console.WriteLine(targetUri.ToString());
+            //Console.WriteLine(targetUri.ToString().Contains("/auth/login"));
+            if (isRedirect)
+            {
+                var redirectPath = targetUri.AbsolutePath + targetUri.Query;
+                Console.WriteLine(redirectPath);
+                context.Response.Redirect(redirectPath);
+                return;
+            }
+            else
             {
                 Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
                 var targetRequestMessage = CreateTargetMessage(context, targetUri);
@@ -54,6 +62,7 @@ namespace CustomReverseProxy.Middlewares
                 }
                 return;
             }
+            /*
             else
             {
                 var loginRedirectPath = targetUri.AbsolutePath + targetUri.Query;
@@ -61,8 +70,15 @@ namespace CustomReverseProxy.Middlewares
                 context.Response.Redirect(loginRedirectPath);
                 return;
             }
+            */
 
             await _next(context);
+        }
+
+        private bool IsProtectedRoute(string url)
+        {
+            bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
+            return url.StartsWith("/app1") || isAuthenticated;
         }
 
 
@@ -89,30 +105,36 @@ namespace CustomReverseProxy.Middlewares
         private Uri BuildTargetUri(HttpContext context)
         {
             // Configure routing to backend applications
-            bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
-            if (context.Request.Path.StartsWithSegments("/app1") && !isAuthenticated)
+            #bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
+            requestedPath = context.Request.Path;
+
+            if (IsProtectedRoute(requestedPath))
             {
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 context.Session.SetString("returnUrl", returnUrl);
                 
                 // Redirect user to Authentication Middleware (/auth/login)
-                return new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}");
+                return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), true);
 
                 //await _next(context);
                 
             }
-            else
+            
+            if (requestedPath.StartsWithSegments("/app2") || requestedPath.StartsWithSegments("/app1"))
             {
-                Console.WriteLine("TargetUri: https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
-                Console.WriteLine(context.User.Identity.IsAuthenticated);
-                return new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
-            }
-            if (context.Request.Path.StartsWithSegments("/app2"))
-            {
-                return new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
+                return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), false);
             }
 
-            return null;
+            if (requestedPath.StartsWithSegments("/callback"))
+            {
+                return (requestedPath, true);
+            }
+            //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
+            //{
+                return (requestedPath, false);
+            //}
+
+            //return null;
         }
 
         private void CopyFromTargetResponseHeaders(HttpContext context, HttpResponseMessage responseMessage)
