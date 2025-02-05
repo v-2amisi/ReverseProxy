@@ -31,8 +31,8 @@ namespace CustomReverseProxy.Controllers
         
         //public async Task<IActionResult> Index([FromQuery] string code, [FromQuery] string state)
         public async Task<IActionResult> Callback(string code, string state)
-        Console.WriteLine("controller is in progress");
         {
+            Console.WriteLine("controller is in progress");
             if (string.IsNullOrEmpty(code))
             {
                 return BadRequest("Authorization code not found.");
