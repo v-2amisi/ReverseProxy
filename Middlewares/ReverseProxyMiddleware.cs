@@ -122,6 +122,8 @@ namespace CustomReverseProxy.Middlewares
             {
                 Console.WriteLine("context.Session.GetString('IsAuthenticated'): " + context.Session.GetString("IsAuthenticated"));
                 bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
+                Console.WriteLine("isAuthenticated after callback: " + isAuthenticated);
+                Console.WriteLine(context.Session.GetString("IsAuthenticated") == "True");
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
@@ -135,7 +137,7 @@ namespace CustomReverseProxy.Middlewares
                 
             }
             
-            if (requestedPath.StartsWithSegments("/app2") || requestedPath.StartsWithSegments("/app1"))
+            if (requestedPath.StartsWithSegments("/app2"))
             {
                 return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), "true" == "false");
             }
