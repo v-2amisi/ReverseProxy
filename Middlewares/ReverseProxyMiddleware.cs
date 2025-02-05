@@ -137,11 +137,13 @@ namespace CustomReverseProxy.Middlewares
 
             if (requestedPath.StartsWithSegments("/callback"))
             {
-                return (new Uri(requestedPath), "true" == "true");
+                var callbackUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+                return (new Uri(callbackUri), "true" == "true");
             }
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
             //{
-                return (new Uri(requestedPath), "true" == "false");
+                var requestedUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+                return (new Uri(requestedUri), "true" == "false");
             //}
 
             //return null;
