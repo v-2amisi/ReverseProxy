@@ -48,7 +48,7 @@ namespace CustomReverseProxy.Middlewares
             {
                 var redirectPath = targetUri.Scheme + "://" + targetUri.Host + ":5443" + targetUri.AbsolutePath + targetUri.Query;
                 //var redirectPath = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
-                Console.WriteLine(redirectPath);
+                Console.WriteLine("ReverseProxy middleware determined a redirect to: " + redirectPath);
                 context.Response.Redirect(redirectPath);
                 return;
             }
@@ -138,6 +138,7 @@ namespace CustomReverseProxy.Middlewares
             if (requestedPath.StartsWithSegments("/callback"))
             {
                 var callbackUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+                Console.WriteLine("ReverseProxy callback uri returned: " + callbackUri);
                 return (new Uri(callbackUri), "true" == "true");
             }
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
