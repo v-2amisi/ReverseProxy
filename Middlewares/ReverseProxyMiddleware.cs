@@ -32,7 +32,7 @@ namespace CustomReverseProxy.Middlewares
             }
             
             //string requestedUrl = context.Request.Path;
-            if(context.Request.Path.StartsWithSegments("/callback"))
+            if(context.Request.Path.StartsWithSegments("/callback") || context.Request.Path.StartsWithSegments("/auth"))
             {
                 await _next(context);
                 return;
