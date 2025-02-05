@@ -30,7 +30,7 @@ namespace CustomReverseProxy.Middlewares
             Console.WriteLine("Auth middleware response location: " + context.Response.Headers["Location"].ToString());
             //var loginRequestPath = context.Response.Headers["Location"].ToString();
             var loginRequestPath = context.Request.Path;
-            if (loginRequestPath.Contains("/auth/login", StringComparison.OrdinalIgnoreCase))
+            if (loginRequestPath.StartsWithSegments("/auth/login"))
             {
                 Console.WriteLine("Auth Middleware: Login process started.");
                 //var loginRequestPathUri = new Uri(loginRequestPath);
