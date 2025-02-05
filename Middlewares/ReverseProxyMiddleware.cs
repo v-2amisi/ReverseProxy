@@ -84,7 +84,7 @@ namespace CustomReverseProxy.Middlewares
         private bool IsProtectedRoute(string url)
         {
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
-            return url.StartsWithSegments("/app1");
+            return url.StartsWith("/app1");
         }
 
 

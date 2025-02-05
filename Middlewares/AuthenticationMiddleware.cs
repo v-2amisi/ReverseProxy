@@ -34,7 +34,7 @@ namespace CustomReverseProxy.Middlewares
             {
                 Console.WriteLine("Auth Middleware: Login process started.");
                 //var loginRequestPathUri = new Uri(loginRequestPath);
-                string returnUrl = context.Request.QueryString;
+                var returnUrl = context.Request.QueryString;
                 Console.WriteLine("Auth Middleware, redirect URI: " + returnUrl);
                 if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
                 // Redirect to Auth0 for authentication
