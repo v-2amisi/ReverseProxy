@@ -16,18 +16,22 @@ using System.Linq;
 namespace CustomReverseProxy.Controllers
 {
     [ApiController]
-    [Route("callback")]
+    [Route("/")]
     public class CallbackController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CallbackController(IConfiguration configuration)
+        public CallbackController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
+            _httpClientFactory = httpClientFactory;
             _configuration = configuration;
         }
-        [HttpGet]
+        [HttpGet("callback")]
         
-        public async Task<IActionResult> Index([FromQuery] string code, [FromQuery] string state)
+        //public async Task<IActionResult> Index([FromQuery] string code, [FromQuery] string state)
+        public async Task<IActionResult> Callback(string code, string state)
+        Console.WriteLine("controller is in progress");
         {
             if (string.IsNullOrEmpty(code))
             {
