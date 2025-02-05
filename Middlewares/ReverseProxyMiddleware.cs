@@ -32,7 +32,11 @@ namespace CustomReverseProxy.Middlewares
             }
             
             //string requestedUrl = context.Request.Path;
-
+            if(context.Request.Path.StartsWithSegments("/callback"))
+            {
+                await _next(context);
+                return;
+            }
             // Step 1: Determine if authentication is needed
             //bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
             //Console.WriteLine("Calling build target uri");
@@ -134,13 +138,14 @@ namespace CustomReverseProxy.Middlewares
             {
                 return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), "true" == "false");
             }
-
+/*
             if (requestedPath.StartsWithSegments("/callback"))
             {
                 var callbackUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
                 Console.WriteLine("ReverseProxy callback uri returned: " + callbackUri);
                 return (new Uri(callbackUri), "true" == "true");
             }
+*/
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
             //{
                 var requestedUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
