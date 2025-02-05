@@ -121,25 +121,25 @@ namespace CustomReverseProxy.Middlewares
             if (IsProtectedRoute(requestedPath))
             {
                 Console.WriteLine("context.Session.GetString('IsAuthenticated'): " + context.Session.GetString("IsAuthenticated"));
-                bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
-                Console.WriteLine("isAuthenticated after callback: " + isAuthenticated);
-                Console.WriteLine(context.Session.GetString("IsAuthenticated") == "True");
+                bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "True";
+                //Console.WriteLine("isAuthenticated after callback: " + isAuthenticated);
+                //Console.WriteLine(context.Session.GetString("IsAuthenticated") == "True");
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
                     //Console.WriteLine("Getting redirected to authentication endpoint /auth/login");
                     // Redirect user to Authentication Middleware (/auth/login)
-                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), "true" == "true");
+                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), "True" == "True");
                 }
                 else {
-                    return (new Uri(returnUrl), "true" == "false");
+                    return (new Uri(returnUrl), "True" == "False");
                 }
                 
             }
             
             if (requestedPath.StartsWithSegments("/app2"))
             {
-                return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), "true" == "false");
+                return (new Uri("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001"), "True" == "False");
             }
 /*
             if (requestedPath.StartsWithSegments("/callback"))
@@ -152,7 +152,7 @@ namespace CustomReverseProxy.Middlewares
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
             //{
                 var requestedUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
-                return (new Uri(requestedUri), "true" == "false");
+                return (new Uri(requestedUri), "True" == "False");
             //}
 
             //return null;
