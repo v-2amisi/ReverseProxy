@@ -172,6 +172,8 @@ namespace CustomReverseProxy.Middlewares
             }
             //Console.WriteLine($"copied target response headers: {context.User.Identity.IsAuthenticated}");
             context.Response.Headers.Remove("transfer-encoding");
+            context.Response.Headers["x-auth0-access-token"] = context.Session.GetString("access_token");
+            context.Response.Headers["x-auth0-id-token"] = context.Session.GetString("id_token");
         }
     }
 
