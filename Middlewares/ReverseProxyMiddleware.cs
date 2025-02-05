@@ -152,7 +152,7 @@ namespace CustomReverseProxy.Middlewares
 */
             //if(requestedPath.StartsWithSegments("/auth/login") || requestedPath.StartsWithSegments("/callback"))
             //{
-                var requestedUri = context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+                var requestedUri = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001" + context.Request.Path + context.Request.QueryString;
                 return (new Uri(requestedUri), "True" == "False");
             //}
 
