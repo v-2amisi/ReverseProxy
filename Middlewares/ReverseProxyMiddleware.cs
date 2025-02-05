@@ -38,8 +38,8 @@ namespace CustomReverseProxy.Middlewares
             //Console.WriteLine("Calling build target uri");
             //Console.WriteLine(context.User.Identity.IsAuthenticated);
             var (targetUri, isRedirect) = BuildTargetUri(context);
-            Console.WriteLine("Build targeturi returned: " + targetUri);
-            Console.WriteLine("Build targeturi returned isRedirect as: " + isRedirect);
+            //Console.WriteLine("Build targeturi returned: " + targetUri);
+            //Console.WriteLine("Build targeturi returned isRedirect as: " + isRedirect);
             //if(targetUri.AbsolutePath == "/") return;
             //string requestedUrl = context.Request.Path;
             //Console.WriteLine(targetUri.ToString());
@@ -54,15 +54,15 @@ namespace CustomReverseProxy.Middlewares
             }
             else
             {
-                Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
-                Console.WriteLine("backendTarget: " + context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString);
+                //Console.WriteLine($"Calling build target message: {context.User.Identity.IsAuthenticated}");
+                //Console.WriteLine("backendTarget: " + context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString);
                 var backendTarget = new Uri(context.Request.Scheme + "://" + context.Request.Host + context.Request.Path + context.Request.QueryString);
                 var targetRequestMessage = CreateTargetMessage(context, backendTarget);
 
                 using (var responseMessage = await _httpClient.SendAsync(targetRequestMessage, HttpCompletionOption.ResponseHeadersRead, context.RequestAborted))
                 {
                     context.Response.StatusCode = (int)responseMessage.StatusCode;
-                    Console.WriteLine($"Calling copy from target resp headers: {context.User.Identity.IsAuthenticated}");
+                    //Console.WriteLine($"Calling copy from target resp headers: {context.User.Identity.IsAuthenticated}");
                     CopyFromTargetResponseHeaders(context, responseMessage);
                     await responseMessage.Content.CopyToAsync(context.Response.Body);
                 }
@@ -104,7 +104,7 @@ namespace CustomReverseProxy.Middlewares
                     requestMessage.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
                 }
             }
-            Console.WriteLine($"Target message built: {context.User.Identity.IsAuthenticated}");
+            //Console.WriteLine($"Target message built: {context.User.Identity.IsAuthenticated}");
             return requestMessage;
         }
 
@@ -120,7 +120,7 @@ namespace CustomReverseProxy.Middlewares
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
-                Console.WriteLine("Getting redirected to authentication endpoint /auth/login");
+                    //Console.WriteLine("Getting redirected to authentication endpoint /auth/login");
                     // Redirect user to Authentication Middleware (/auth/login)
                     return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), "true" == "true");
                 }
@@ -158,7 +158,7 @@ namespace CustomReverseProxy.Middlewares
             {
                 context.Response.Headers[header.Key] = header.Value.ToArray();
             }
-            Console.WriteLine($"copied target response headers: {context.User.Identity.IsAuthenticated}");
+            //Console.WriteLine($"copied target response headers: {context.User.Identity.IsAuthenticated}");
             context.Response.Headers.Remove("transfer-encoding");
         }
     }
