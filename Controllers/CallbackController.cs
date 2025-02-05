@@ -20,11 +20,11 @@ namespace CustomReverseProxy.Controllers
     public class CallbackController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IHttpClientFactory _httpClientFactory;
+        //private readonly IHttpClientFactory _httpClientFactory;
 
-        public CallbackController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public CallbackController(IConfiguration configuration)
         {
-            _httpClientFactory = httpClientFactory;
+            //_httpClientFactory = httpClientFactory;
             _configuration = configuration;
         }
         [HttpGet("callback")]
