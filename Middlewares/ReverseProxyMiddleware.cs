@@ -120,6 +120,7 @@ namespace CustomReverseProxy.Middlewares
 
             if (IsProtectedRoute(requestedPath))
             {
+                Console.WriteLine("context.Session.GetString('IsAuthenticated'): " + context.Session.GetString("IsAuthenticated"));
                 bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "true";
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
