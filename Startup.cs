@@ -85,7 +85,7 @@ namespace CustomReverseProxy
 			app.UseAuthorization();
 			//Console.WriteLine("AuthZ middleware returned");
 
-			app.UseMiddleware<AuthenticationMiddleware>();
+			//app.UseMiddleware<AuthenticationMiddleware>();
 			app.UseMiddleware<ReverseProxyMiddleware>();
 			//Console.WriteLine("Reverse Proxy middleware returned");
 			app.UseMiddleware<AuthenticationMiddleware>();
