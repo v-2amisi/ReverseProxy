@@ -74,8 +74,8 @@ namespace CustomReverseProxy.Middlewares
                     var responseToModify = await responseMessage.Content.ReadAsStringAsync();
                     if (responseMessage.Content.Headers.ContentType?.MediaType == "text/html")
                     {
-                        var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</div";
-                        dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</div";
+                        var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</div></br>";
+                        dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</div>";
                         responseToModify += dataToAdd;
                     }
                     // End of modify section
