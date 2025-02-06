@@ -69,7 +69,7 @@ namespace CustomReverseProxy.Controllers
                 {
                     var claimType = claim.Type;
                     var claimValue = claim.Value;
-                    allClaims += "ClaimType:" + claimType + "," + "ClaimValue:" + claimValue ";";
+                    allClaims += "ClaimType:" + claimType + "," + "ClaimValue:" + claimValue + ";";
                     
                     //Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
                     //totalClaims++;
