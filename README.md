@@ -69,6 +69,23 @@ appSettings.json
 
 ## **Configuration**  
 
+### **PFX Certificate generation**
+- On a Mac
+	- Open terminal and use the openssl command to generate a private key and a self-signed certificate with a dns name.
+```bash
+openssl req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes \
+  -subj "/C=US/ST=California/L=San Francisco/O=MyOrganization/CN=mydomain.com" \
+  -addext "subjectAltName=DNS:example.org.com,DNS:example.org.com"
+
+```
+	- Convert the certificat to PFX format
+```bash
+openssl pkcs12 -export -out certificate.pfx -inkey private.key -in certificate.crt -passout pass:yourpassword
+
+``` 
+
+
+
 ### **appSettings.json Configuration**
 Add kestrel server configuration, certificate configuration and Auth0 configuration in `appSettings.json`.
 ```json
@@ -77,7 +94,7 @@ Add kestrel server configuration, certificate configuration and Auth0 configurat
     "ClientId":"clientId",
     "ClientSecret": "clientSecret",
     "RedirectUri":"https://example.org.com/callback"
-  },
+ },
   "Kestrel": {
     "Endpoints": {
       "Http": {
@@ -88,7 +105,8 @@ Add kestrel server configuration, certificate configuration and Auth0 configurat
 	"Certificate": {
 		"Path": "pathToPFXFile",
 		"Password": "passwordForPFXFile"
-	}
+      }
+  }
 ```
 
 ### **Reverse Proxy Middleware Configuration**
@@ -195,8 +213,8 @@ public class AuthenticationMiddleware
 ---
 
 ## **Future Enhancements**  
-- Add support for external configuration providers.  
-- Implement caching for tokens and user information.  
+- Add support for SAML.  
+- Implement OAuth client credentials flow for reverse proxy to act as a client for internal authorization server.  
 - Add role-based authorization.  
 
 ---
