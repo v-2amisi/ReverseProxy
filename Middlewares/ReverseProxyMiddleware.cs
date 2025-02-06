@@ -76,7 +76,7 @@ namespace CustomReverseProxy.Middlewares
                     {
                         var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</br>";
                         List<string> idTokenClaims = new List<string>(context.Session.GetString("AllIDTokenClaims").Split(";"));
-                        foreach (idTokenClaim in idTokenClaims)
+                        foreach (var idTokenClaim in idTokenClaims)
                         {
                             List<string> claimSplit = new List<string>(idTokenClaim.Split(","));
                             List<string> claimNameSplit = new List<string>(claimSplit[0].Split(":"));
@@ -86,14 +86,14 @@ namespace CustomReverseProxy.Middlewares
                         dataToAdd += "</div></br>";
                         dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</br>";
                         List<string> accessTokenClaims = new List<string>(context.Session.GetString("AllAccessTokenClaims").Split(";"));
-                        foreach (accessTokenClaim in accessTokenClaims)
+                        foreach (var accessTokenClaim in accessTokenClaims)
                         {
                             List<string> claimSplit = new List<string>(accessTokenClaim.Split(","));
                             List<string> claimNameSplit = new List<string>(claimSplit[0].Split(":"));
                             List<string> claimValueSplit = new List<string>(claimSplit[1].Split(":"));
                             dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1]; + "</p></br>";
                         }
-                        dataToAdd += "</div></br>"
+                        dataToAdd += "</div></br>";
                         responseToModify += dataToAdd;
                     }
                     // End of modify section
