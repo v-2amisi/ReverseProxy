@@ -55,7 +55,8 @@ namespace CustomReverseProxy.Controllers
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(idToken);
-                var userAccessToken = handler.ReadJwtToken(accessToken);
+                var handlerAt = new JwtSecurityTokenHandler();
+                var userAccessToken = handlerAt.ReadJwtToken(accessToken);
 
                 //Console.WriteLine("Lets check jwtToken value");
                 //Console.WriteLine(jwtToken.Claims);
