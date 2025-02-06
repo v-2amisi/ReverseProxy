@@ -72,17 +72,17 @@ appSettings.json
 ### **PFX Certificate generation**
 - On a Mac
 	- Open terminal and use the openssl command to generate a private key and a self-signed certificate with a dns name.
-```bash
-openssl req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes \
-  -subj "/C=US/ST=California/L=San Francisco/O=MyOrganization/CN=mydomain.com" \
-  -addext "subjectAltName=DNS:example.org.com,DNS:example.org.com"
-
-```
+	```bash
+	openssl req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes \
+	  -subj "/C=US/ST=California/L=San Francisco/O=MyOrganization/CN=mydomain.com" \
+	  -addext "subjectAltName=DNS:example.org.com,DNS:example.org.com"
+	
+	```
 	- Convert the certificat to PFX format
-```bash
-openssl pkcs12 -export -out certificate.pfx -inkey private.key -in certificate.crt -passout pass:yourpassword
-
-``` 
+	```bash
+	openssl pkcs12 -export -out certificate.pfx -inkey private.key -in certificate.crt -passout pass:yourpassword
+	
+	``` 
 
 
 
