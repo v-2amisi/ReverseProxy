@@ -77,10 +77,11 @@ namespace CustomReverseProxy.Controllers
                 HttpContext.Session.SetString("AllIDTokenClaims", allClaims.TrimEnd(';'));
 
                 string allAccessClaims = null;
-                foreach (var claim in allAtClaims)
+                foreach (var atClaim in allAtClaims)
                 {
-                    var claimType = claim.Type;
-                    var claimValue = claim.Value;
+                    var claimType = atClaim.Type;
+                    var claimValue = atClaim.Value;
+                    Console.WriteLine(claimType + ":" + claimValue);
                     allAccessClaims += claimType + ":" + claimValue + ";";
                 }
                 Console.WriteLine("allAccessClaims: " + allAccessClaims);
