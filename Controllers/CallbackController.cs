@@ -64,7 +64,7 @@ namespace CustomReverseProxy.Controllers
                 var claims = jwtToken.Claims;
                 var allAtClaims = userAccessToken.Claims;
                 
-                var allClaims = null;
+                string allClaims = null;
                 foreach (var claim in claims)
                 {
                     var claimType = claim.Type;
@@ -77,7 +77,7 @@ namespace CustomReverseProxy.Controllers
 
                 HttpContext.Session.SetString("AllIDTokenClaims", allClaims.TrimEnd(";"));
 
-                var allAccessClaims = null;
+                string allAccessClaims = null;
                 foreach (var claim in allAtClaims)
                 {
                     var claimType = claim.Type;

@@ -81,7 +81,7 @@ namespace CustomReverseProxy.Middlewares
                             List<string> claimSplit = new List<string>(idTokenClaim.Split(","));
                             List<string> claimNameSplit = new List<string>(claimSplit[0].Split(":"));
                             List<string> claimValueSplit = new List<string>(claimSplit[1].Split(":"));
-                            dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1]; + "</p></br>";
+                            dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1] + "</p></br>";
                         }
                         dataToAdd += "</div></br>";
                         dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</br>";
@@ -91,7 +91,7 @@ namespace CustomReverseProxy.Middlewares
                             List<string> claimSplit = new List<string>(accessTokenClaim.Split(","));
                             List<string> claimNameSplit = new List<string>(claimSplit[0].Split(":"));
                             List<string> claimValueSplit = new List<string>(claimSplit[1].Split(":"));
-                            dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1]; + "</p></br>";
+                            dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1] + "</p></br>";
                         }
                         dataToAdd += "</div></br>";
                         responseToModify += dataToAdd;
