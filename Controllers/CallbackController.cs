@@ -55,8 +55,8 @@ namespace CustomReverseProxy.Controllers
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(idToken);
-                var handlerAt = new JwtSecurityTokenHandler();
-                var userAccessToken = handlerAt.ReadJwtToken(accessToken);
+                //var handlerAt = new JwtSecurityTokenHandler();
+                //var userAccessToken = handlerAt.ReadJwtToken(accessToken);
 
                 //Console.WriteLine("Lets check jwtToken value");
                 //Console.WriteLine(jwtToken.Claims);
@@ -77,6 +77,7 @@ namespace CustomReverseProxy.Controllers
 
                 HttpContext.Session.SetString("AllIDTokenClaims", allClaims.TrimEnd(';'));
 
+                /*
                 string allAccessClaims = null;
                 foreach (var atClaim in allAtClaims)
                 {
@@ -88,6 +89,7 @@ namespace CustomReverseProxy.Controllers
                 Console.WriteLine("allAccessClaims: " + allAccessClaims);
 
                 HttpContext.Session.SetString("AllAccessTokenClaims", allAccessClaims.TrimEnd(';'));
+                */
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
                 

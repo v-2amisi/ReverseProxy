@@ -84,7 +84,9 @@ namespace CustomReverseProxy.Middlewares
                             Console.WriteLine(claimSplit[0] + ": " + claimSplit[1]);
                             dataToAdd += "<p>" + claimSplit[0] + ": " + claimSplit[1] + "</p></br>";
                         }
-                        dataToAdd += "</div></br>";
+                        dataToAdd += "</div>";
+
+                        /*
                         dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</br>";
                         List<string> accessTokenClaims = new List<string>(context.Session.GetString("AllAccessTokenClaims").Split(';'));
                         foreach (var accessTokenClaim in accessTokenClaims)
@@ -95,6 +97,7 @@ namespace CustomReverseProxy.Middlewares
                             dataToAdd += "<p>" + claimSplit[0] + ": " + claimSplit[1] + "</p></br>";
                         }
                         dataToAdd += "</div></br>";
+                        */
                         responseToModify += dataToAdd;
                     }
                     // End of modify section
