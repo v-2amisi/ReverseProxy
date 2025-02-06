@@ -55,22 +55,39 @@ namespace CustomReverseProxy.Controllers
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(idToken);
+                var userAccessToken = handler.ReadJwtToken(accessToken);
 
                 //Console.WriteLine("Lets check jwtToken value");
                 //Console.WriteLine(jwtToken.Claims);
                 //Console.WriteLine(jwtToken.ClaimsIdentity);
                 //var claims = jwtToken.Claims.ToList();
                 var claims = jwtToken.Claims;
-                /*
-                foreach (var claim in jwtToken.Claims)
-                {
-                    Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-                }
-                */
+                var allAtClaims = userAccessToken.Claims;
                 
+                var allClaims = null;
+                foreach (var claim in claims)
+                {
+                    var claimType = claim.Type;
+                    var claimValue = claim.Value;
+                    allClaims += "ClaimType:" + claimType + "," + "ClaimValue:" + claimValue ";";
+                    
+                    //Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+                    //totalClaims++;
+                }
+
+                HttpContext.Session.SetString("AllIDTokenClaims", allClaims.TrimEnd(";"));
+
+                var allAccessClaims = null;
+                foreach (var claim in allAtClaims)
+                {
+                    var claimType = claim.Type;
+                    var claimValue = claim.Value;
+                    allAccessClaims += "ClaimType:" + claimType + "," + "ClaimValue:" + claimValue + ";";
+                }
+                
+                HttpContext.Session.SetString("AllAccessTokenClaims", allAccessClaims.TrimEnd(";"));
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
-                
                 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 

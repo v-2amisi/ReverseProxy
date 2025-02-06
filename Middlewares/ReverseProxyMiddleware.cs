@@ -74,8 +74,26 @@ namespace CustomReverseProxy.Middlewares
                     var responseToModify = await responseMessage.Content.ReadAsStringAsync();
                     if (responseMessage.Content.Headers.ContentType?.MediaType == "text/html")
                     {
-                        var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</div></br>";
-                        dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</div>";
+                        var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</br>";
+                        List<string> idTokenClaims = new List<string>(context.Session.GetString("AllIDTokenClaims").Split(";"));
+                        foreach (idTokenClaim in idTokenClaims)
+                        {
+                            List<string> claimSplit = new List<string>(idTokenClaim.Split(","));
+                            List<string> claimNameSplit = new List<string>(claimSplit[0].Split(":"));
+                            List<string> claimValueSplit = new List<string>(claimSplit[1].Split(":"));
+                            dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1]; + "</p></br>";
+                        }
+                        dataToAdd += "</div></br>";
+                        dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</br>";
+                        List<string> accessTokenClaims = new List<string>(context.Session.GetString("AllAccessTokenClaims").Split(";"));
+                        foreach (accessTokenClaim in accessTokenClaims)
+                        {
+                            List<string> claimSplit = new List<string>(accessTokenClaim.Split(","));
+                            List<string> claimNameSplit = new List<string>(claimSplit[0].Split(":"));
+                            List<string> claimValueSplit = new List<string>(claimSplit[1].Split(":"));
+                            dataToAdd += "<p>" + claimNameSplit[1] + ": " + claimValueSplit[1]; + "</p></br>";
+                        }
+                        dataToAdd += "</div></br>"
                         responseToModify += dataToAdd;
                     }
                     // End of modify section
