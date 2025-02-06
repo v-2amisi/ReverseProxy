@@ -69,7 +69,7 @@ namespace CustomReverseProxy.Controllers
                 {
                     var claimType = claim.Type;
                     var claimValue = claim.Value;
-                    allClaims += "ClaimType:" + claimType + "," + "ClaimValue:" + claimValue + ";";
+                    allClaims += claimType + ":" + claimValue + ";";
                     
                     //Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
                     //totalClaims++;
@@ -82,7 +82,7 @@ namespace CustomReverseProxy.Controllers
                 {
                     var claimType = claim.Type;
                     var claimValue = claim.Value;
-                    allAccessClaims += "ClaimType:" + claimType + "," + "ClaimValue:" + claimValue + ";";
+                    allAccessClaims += claimType + ":" + claimValue + ";";
                 }
                 
                 HttpContext.Session.SetString("AllAccessTokenClaims", allAccessClaims.TrimEnd(';'));
