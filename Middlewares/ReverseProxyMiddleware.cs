@@ -69,7 +69,19 @@ namespace CustomReverseProxy.Middlewares
                     context.Response.StatusCode = (int)responseMessage.StatusCode;
                     //Console.WriteLine($"Calling copy from target resp headers: {context.User.Identity.IsAuthenticated}");
                     CopyFromTargetResponseHeaders(context, responseMessage);
-                    await responseMessage.Content.CopyToAsync(context.Response.Body);
+                    
+                    // Modify the response sent to browser before sending
+                    var responseToModify = await responseMessage.Content.ReadAsStringAsync();
+                    if (responseMessage.Content.Headers.ContentType?.MediaType == "text/html")
+                    {
+                        var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</div";
+                        dataToAdd += "<div>Access Token: " + context.Session.GetString("access_token") + "</div";
+                        responseToModify += dataToAdd;
+                    }
+                    // End of modify section
+
+                    await context.Response.WriteAsync(responseToModify, Encoding.UTF8);
+                    //await responseMessage.Content.CopyToAsync(context.Response.Body);
                 }
                 return;
             }
