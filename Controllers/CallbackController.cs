@@ -71,11 +71,8 @@ namespace CustomReverseProxy.Controllers
                     var claimValue = claim.Value;
                     Console.WriteLine(claimType + ":" + claimValue);
                     allClaims += claimType + ":" + claimValue + ";";
-                    Console.WriteLine("allClaims: " + allClaims);
-                    
-                    //Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-                    //totalClaims++;
                 }
+                Console.WriteLine("allClaims: " + allClaims);
 
                 HttpContext.Session.SetString("AllIDTokenClaims", allClaims.TrimEnd(';'));
 
@@ -86,7 +83,8 @@ namespace CustomReverseProxy.Controllers
                     var claimValue = claim.Value;
                     allAccessClaims += claimType + ":" + claimValue + ";";
                 }
-                
+                Console.WriteLine("allAccessClaims: " + allAccessClaims);
+
                 HttpContext.Session.SetString("AllAccessTokenClaims", allAccessClaims.TrimEnd(';'));
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
