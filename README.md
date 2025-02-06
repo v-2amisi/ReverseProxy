@@ -70,7 +70,7 @@ appSettings.json
 ## **Configuration**  
 
 ### **PFX Certificate generation**
-- On a Mac
+- On Mac
 	- Open terminal and use the openssl command to generate a private key and a self-signed certificate with a dns name.
 	```bash
 	openssl req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes \
@@ -82,7 +82,19 @@ appSettings.json
 	```bash
 	openssl pkcs12 -export -out certificate.pfx -inkey private.key -in certificate.crt -passout pass:yourpassword
 	
-	``` 
+	```
+
+ - On Windows
+   	- Open powershell and generate a self-signed certificate using the following command
+	```powershell
+	$cert = New-SelfSignedCertificate -DnsName "yourdomain.com" -CertStoreLocation "Cert:\LocalMachine\My"
+	
+	```
+ 	- Export the certificate as a PFX file
+  	```powershell
+	$CertPassword = ConvertTo-SecureString -String "yourpassword" -Force -AsPlainText
+	Export-PfxCertificate -Cert "Cert:\LocalMachine\My\$($cert.Thumbprint)" -FilePath "C:\path\to\certificate.pfx" -Password $CertPassword
+	```
 
 
 
