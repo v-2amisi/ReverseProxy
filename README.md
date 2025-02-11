@@ -37,7 +37,7 @@ graph TD;
     E --> F[Token Retrieval];
     F --> G[Session Management];
     G --> H{Authenticated?};
-    H -->|Yes| I[Redirect to Requested Resource];
+    H -->|Yes| I[Proxy to Requested Resource];
     H -->|No| D;
 ```
 
