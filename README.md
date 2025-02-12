@@ -69,6 +69,66 @@ appSettings.json
 
 ## **Configuration**  
 
+### **IdP Configuration**
+In this setup Auth0 is configured as the identity store, OIDC provider and OAuth 2.0 token service provider. Okta is used as a federation provider. The configuration is described below:
+
+- Okta (Federated IdP)
+    - Create a SAML application
+        - Navigate to Applications and click Add Application.
+        - Choose Web as the platform.
+        - Under Sign on method, select SAML 2.0.
+        - Click Next.
+    - Configure SAML settings
+        - Single sign on URL: You’ll set this later in Auth0 or use a temporary URL (e.g., https://YOUR_DOMAIN/callback), as Auth0 will provide the callback configuration.
+        - Audience URI (SP Entity ID): Use a unique identifier such as your Auth0 client’s identifier (for example, https://YOUR_AUTH0_DOMAIN/saml/metadata or a value provided by Auth0).
+        - Attribute Statements (optional): Define mappings for user attributes (e.g., email, name, roles).
+        - Click Next and then Finish to create the application.
+        - Once created, note the Identity Provider metadata URL or download the metadata XML from Okta. This metadata contains the SSO URL and the X.509 certificate you’ll need later.
+- Auth0 (Identity Provider)
+    - Create an OIDC web application
+        - In the left-hand menu, click on "Applications".
+        - Click the "Create Application" button.
+        - In the "Create Application" dialog:
+        - Name: Enter a name for your application (e.g., "My OIDC Web App").
+        - Application Type: Choose "Regular Web Application".
+        - Click "Create".
+    - Configure application settings
+        - Configure callback URLs (Callback url for the reverse proxy application).
+        - Optionally configure logout URLs (Home page for the reverse proxy application).
+    - Review the application settings to be used in the reverse proxy configuration
+        - Domain (tenantname.us.auth0.com)
+        - Client ID: Identifier for the application
+        - Client Secret: Application secret key
+        - Configure appSettings.json on the reverse proxy project using the values discovered above.
+    - Configure an API and authorize the application created above
+        - In the left-hand menu, click on "APIs".
+        - Click the "Create API" button.
+        - In the Create API dialog:
+        - Name: Enter a name for your API (e.g., "My Custom API").
+        - Identifier: Provide a unique identifier (a URL-like string, e.g., https://myapi.example.com). This    identifier is used as the audience when requesting access tokens.
+        - Signing Algorithm: Choose an algorithm (typically RS256 is recommended).
+        - Click "Create".
+        - In your newly created API’s settings, go to "Permissions" (or "Scopes") section.
+        (Note: Depending on the Auth0 dashboard version, you might see a section called "Allowed Scopes" or simply "Scopes".)
+        - Click "Add Scopes" (or similar) to define custom scopes.
+        - For each scope, specify:
+        Scope Name: A short name that represents the permission (e.g., read:data or write:data).
+        Description: A brief description of what the scope allows (e.g., "Read data from My Custom API" or "Write data to My Custom API").
+        - Save your changes.
+        - In the API's settings, go to "Machine to Machine Applications" and make sure that the application created earlier is Authorized with Permissions granted to the scopes defined.
+    - Create an Enterprise SAML connection
+        - Go to Connections -> Enterprise.
+        - In the Enterprise connections list, look for SAML 2.0.
+        - Fill in the connection fields using information from Okta:
+            - Name: Provide a name for this connection (e.g., okta-saml).
+            - Display Name: (Optional) The name users see on the login screen.
+            - Metadata URL or XML: If you have the Okta metadata URL, enter it here (e.g., https://YOUR_OKTA_DOMAIN/app/YOUR_APP_ID/sso/saml/metadata). Alternatively, paste the downloaded metadata XML.
+            - Issuer (Entity ID): Set this to the Audience URI you configured in Okta (or use the value provided by Auth0 for your connection).
+            - Sign In URL: This should be taken from the metadata (SSO URL from Okta).
+            - Signing Certificate: This is the X.509 certificate from Okta’s metadata. If it’s not automatically populated from the metadata URL, paste the certificate manually.
+            - Mapping: Optionally, map SAML attributes to Auth0 user profile fields (e.g., map SAML attribute EmailAddress to Auth0’s email).
+            - Save your connection.
+
 ### **PFX Certificate generation**
 - On Mac
 	- Open terminal and use the openssl command to generate a private key and a self-signed certificate with a dns name.
