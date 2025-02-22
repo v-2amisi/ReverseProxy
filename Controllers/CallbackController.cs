@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text;
+using System.Collections.Generic;
 using System.Text.Json;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -12,6 +14,7 @@ using System.Security.Claims;
 using System.IdentityModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Web;
 
 namespace CustomReverseProxy.Controllers
 {
@@ -20,16 +23,63 @@ namespace CustomReverseProxy.Controllers
     public class CallbackController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        //private readonly IHttpClientFactory _httpClientFactory;
 
         public CallbackController(IConfiguration configuration)
         {
-            //_httpClientFactory = httpClientFactory;
             _configuration = configuration;
         }
+
+        // SAML Callback POST binding
+        [HttpPost("saml")]
+        public IActionResult HandleSamlPost([FromForm] SamlAuthModel samlResponseModel)
+        {
+            return ProcessSamlResponse(samlResponseModel);
+        }
+
+        // SAML Callback (Redirect Binding)
+        [HttpGet("saml")]
+        public IActionResult HandleSamlRedirect([FromQuery] string SAMLResponse, [FromQuery] string RelayState)
+        {
+            var samlModel = new SamlAuthModel
+            {
+                SamlResponse = SAMLResponse,
+                RelayState = RelayState
+            };
+            return ProcessSamlResponse(samlModel);
+        }
+
+        private IActionResult ProcessSamlResponse(SamlAuthModel samlResponseModel)
+        {
+            if (samlResponseModel == null || string.IsNullOrEmpty(samlResponseModel.SamlResponse))
+            {
+                _logger.LogError("SAML Response is null or empty.");
+                return BadRequest("Invalid SAML Response.");
+            }
+
+            try
+            {
+                // Extract claims from SAML response
+                ClaimsIdentity identity = samlResponseModel.GetClaimsIdentity();
+                var claimsPrincipal = new ClaimsPrincipal(identity);
+
+                // Authenticate user session
+                HttpContext.SignInAsync(claimsPrincipal);
+                HttpContext.Session.SetString("IsAuthenticated", "true");
+
+                _logger.LogInformation("SAML authentication successful.");
+
+                // Redirect to original requested URL after authentication
+                string returnUrl = HttpContext.Session.GetString("returnUrl") ?? "/";
+                return Redirect(returnUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error processing SAML response: {ex.Message}");
+                return StatusCode(500, "SAML authentication failed.");
+            }
+        }
+
         [HttpGet("callback")]
-        
-        //public async Task<IActionResult> Index([FromQuery] string code, [FromQuery] string state)
         public async Task<IActionResult> Callback(string code, string state)
         {
             Console.WriteLine("controller is in progress");
@@ -55,15 +105,7 @@ namespace CustomReverseProxy.Controllers
 
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(idToken);
-                //var handlerAt = new JwtSecurityTokenHandler();
-                //var userAccessToken = handlerAt.ReadJwtToken(accessToken);
-
-                //Console.WriteLine("Lets check jwtToken value");
-                //Console.WriteLine(jwtToken.Claims);
-                //Console.WriteLine(jwtToken.ClaimsIdentity);
-                //var claims = jwtToken.Claims.ToList();
                 var claims = jwtToken.Claims;
-                //var allAtClaims = userAccessToken.Claims;
                 
                 string allClaims = null;
                 foreach (var claim in claims)
@@ -77,19 +119,6 @@ namespace CustomReverseProxy.Controllers
 
                 HttpContext.Session.SetString("AllIDTokenClaims", allClaims.TrimEnd(';'));
 
-                /*
-                string allAccessClaims = null;
-                foreach (var atClaim in allAtClaims)
-                {
-                    var claimType = atClaim.Type;
-                    var claimValue = atClaim.Value;
-                    Console.WriteLine(claimType + ":" + claimValue);
-                    allAccessClaims += claimType + ":" + claimValue + ";";
-                }
-                Console.WriteLine("allAccessClaims: " + allAccessClaims);
-
-                HttpContext.Session.SetString("AllAccessTokenClaims", allAccessClaims.TrimEnd(';'));
-                */
 
                 var claimsIdentity = new ClaimsIdentity(claims, "OIDC");
                 
@@ -100,14 +129,9 @@ namespace CustomReverseProxy.Controllers
                 {
                     Console.WriteLine($"CallbackControllerAuthentication Type: {identity.AuthenticationType}");
                     Console.WriteLine($"Is Authenticated: {identity.IsAuthenticated}");
-                    //Console.WriteLine($"Name: {identity.name}");
                 }
 
                 HttpContext.User = claimsPrincipal;
-
-                //Console.WriteLine(HttpContext.User.Identity.IsAuthenticated);
-                //Console.WriteLine(idToken);
-                //Console.WriteLine(accessToken);
 
                 // Save tokens to session or cookie
                 HttpContext.Session.SetString("id_token", idToken);
@@ -117,7 +141,6 @@ namespace CustomReverseProxy.Controllers
 
                 // Redirect to home or any protected resource
                 return Redirect("/app1");
-                //return Redirect("https://ec2-54-82-60-31.compute-1.amazonaws.com:5001");
             }
             catch (Exception ex)
             {
@@ -156,38 +179,31 @@ namespace CustomReverseProxy.Controllers
             }
 
             var responseBody = await response.Content.ReadAsStringAsync();
-            /*
-            if(responseBody != null)
-            {
-                HttpContext.Response.ContentType = "text/plain";
-                await HttpContext.Response.WriteAsync(responseBody);
-
-                return JsonSerializer.Deserialize<TokenResponse>(responseBody);
-            }
-            */
-            //Console.WriteLine(responseBody);
+            
             var formattedResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenResponse>(responseBody);
             if(formattedResponse.Access_Token == null)
             {
                 Console.WriteLine("No access token in response");
             }
-            //Console.WriteLine(formattedResponse.Access_Token);
-            //Console.WriteLine(formattedResponse.Id_Token);
-            //Console.WriteLine(formattedResponse.Scope);
-            //Console.WriteLine(formattedResponse.Expires_In);
-            //Console.WriteLine(formattedResponse.Token_Type);
             return formattedResponse;
         }
-/*
-        private ClaimsPrincipal BuildClaimsPrincipal(string tokenResponse)
-        {
-            // Create ClaimsPrincipal from token response
-            // ...
-            return new ClaimsPrincipal();
-        }
-*/
     }
 
+    // Models - think about separating model implementations
+    public class SamlAuthModel
+    {
+        public string SamlResponse { get; set; }
+        public string RelayState { get; set; }
+        public Dictionary<string, string> Attributes { get; set; } = new();
+
+        public ClaimsIdentity GetClaimsIdentity()
+        {
+            var claims = Attributes.Select(attr => new Claim(attr.Key, attr.Value)).ToList();
+            return new ClaimsIdentity(claims, "SAML");
+        }
+    }
+    
+    
     public class TokenResponse
     {
         public string Access_Token { get; set; }
