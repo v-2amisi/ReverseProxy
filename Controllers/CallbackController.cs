@@ -15,6 +15,7 @@ using System.IdentityModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Web;
+using System.Xml;
 
 namespace CustomReverseProxy.Controllers
 {
@@ -200,11 +201,54 @@ namespace CustomReverseProxy.Controllers
     {
         public string SamlResponse { get; set; }
         public string RelayState { get; set; }
-        public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
+        //public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         public ClaimsIdentity GetClaimsIdentity()
         {
-            var claims = Attributes.Select(attr => new Claim(attr.Key, attr.Value)).ToList();
+            //var claims = Attributes.Select(attr => new Claim(attr.Key, attr.Value)).ToList();
+            if (string.IsNullOrEmpty(SamlResponse))
+            {
+                throw new ArgumentNullException(nameof(SamlResponse), "SAMLResponse is null or empty.");
+            }
+
+            // Decode the Base64 encoded SAML response
+            byte[] decodedBytes = Convert.FromBase64String(SamlResponse);
+            string decodedXml = Encoding.UTF8.GetString(decodedBytes);
+
+            // Load the XML document
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.PreserveWhitespace = true;
+            xmlDoc.LoadXml(decodedXml);
+
+            // Create a namespace manager for SAML namespaces
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
+            nsmgr.AddNamespace("samlp", "urn:oasis:names:tc:SAML:2.0:protocol");
+            nsmgr.AddNamespace("saml", "urn:oasis:names:tc:SAML:2.0:assertion");
+
+            // Select all Attribute nodes in the SAML Assertion
+            XmlNodeList attributeNodes = xmlDoc.SelectNodes("//saml:AttributeStatement/saml:Attribute", nsmgr);
+            List<Claim> claims = new List<Claim>();
+
+            if (attributeNodes != null)
+            {
+                foreach (XmlNode attribute in attributeNodes)
+                {
+                    // Get the Name attribute of the SAML Attribute
+                    string attributeName = attribute.Attributes["Name"]?.Value;
+                    if (string.IsNullOrEmpty(attributeName))
+                    {
+                        continue;
+                    }
+
+                    // Get the first AttributeValue; you can extend this to handle multiple values if needed.
+                    XmlNode attributeValueNode = attribute.SelectSingleNode("saml:AttributeValue", nsmgr);
+                    if (attributeValueNode != null)
+                    {
+                        string attributeValue = attributeValueNode.InnerText;
+                        claims.Add(new Claim(attributeName, attributeValue));
+                    }
+                }
+            }
             return new ClaimsIdentity(claims, "SAML");
         }
     }
