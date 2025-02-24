@@ -22,13 +22,13 @@ namespace CustomReverseProxy.Controllers
     [Route("/")]
     public class CallbackController : ControllerBase
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<CallbackController> _logger;
         private readonly IConfiguration _configuration;
 
-        public CallbackController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILogger<CallbackController> logger)
+        public CallbackController(IConfiguration configuration, ILogger<CallbackController> logger)
         {
-            _httpContextAccessor = httpContextAccessor;
+            //_httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _configuration = configuration;
         }
