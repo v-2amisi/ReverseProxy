@@ -134,7 +134,7 @@ namespace CustomReverseProxy.Middlewares
 
             if(IsSAMLRoute(requestedPath))
             {
-                bool isAuthenticated = context.Session.GetString('IsAuthenticated') == "True";
+                bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "True";
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);

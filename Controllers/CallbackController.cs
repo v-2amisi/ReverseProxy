@@ -194,7 +194,7 @@ namespace CustomReverseProxy.Controllers
     {
         public string SamlResponse { get; set; }
         public string RelayState { get; set; }
-        public Dictionary<string, string> Attributes { get; set; } = new();
+        public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
 
         public ClaimsIdentity GetClaimsIdentity()
         {
