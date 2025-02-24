@@ -73,7 +73,7 @@ namespace CustomReverseProxy.Middlewares
                         }
                         if(authType == "SAML")
                         {
-                            var dataToAdd += context.Session.GetString("SAMLClaims");
+                            var dataToAdd = context.Session.GetString("SAMLClaims");
 
                             responseToModify += dataToAdd;
                         }
