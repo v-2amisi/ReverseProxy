@@ -23,7 +23,7 @@ namespace CustomReverseProxy.Middlewares
             var loginRequestPath = context.Request.Path;
             string returnUrl = context.Request.QueryString.Value;
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
-            if (loginRequestPath.StartsWithSegments("/auth/login"))
+            if (loginRequestPath.StartsWithSegments("/auth/login/oidc"))
             {
                 var redirectUri = $"{_appSettings.RedirectUri}";
                 var clientId = $"{_appSettings.ClientId}";
@@ -34,7 +34,7 @@ namespace CustomReverseProxy.Middlewares
                 return;
             }
 
-            if (loginRequestPath.StartsWithSegments("/saml"))
+            if (loginRequestPath.StartsWithSegments("/auth/login/saml"))
             {
                 context.Response.Redirect("https://dev-vrk5vwulx3wfsclz.us.auth0.com/samlp/Nov7Lx4Ggg3mCh2AGsvmaabV7LV40uvv?redirect_uri=" + HttpUtility.UrlEncode(returnUrl));
                 return;

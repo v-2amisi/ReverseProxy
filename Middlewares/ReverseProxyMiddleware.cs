@@ -124,7 +124,7 @@ namespace CustomReverseProxy.Middlewares
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
-                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login?redirect_uri={returnUrl}"), "True" == "True");
+                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login/oidc?redirect_uri={returnUrl}"), "True" == "True");
                 }
                 else {
                     return (new Uri(returnUrl), "True" == "False");
@@ -138,7 +138,7 @@ namespace CustomReverseProxy.Middlewares
                 string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
-                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/saml?redirect_uri={returnUrl}"), "True" == "True");
+                    return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login/saml?redirect_uri={returnUrl}"), "True" == "True");
                 }
                 else {
                     return (new Uri(returnUrl), "True" == "False");
