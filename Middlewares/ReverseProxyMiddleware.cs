@@ -55,30 +55,34 @@ namespace CustomReverseProxy.Middlewares
                     
                     // Modify the response sent to browser before sending
                     var responseToModify = await responseMessage.Content.ReadAsStringAsync();
-                    if (responseMessage.Content.Headers.ContentType?.MediaType == "text/html")
                     var authType = context.Session.GetString("AuthType");
-                    if(authType == "OIDC")
+                    if (responseMessage.Content.Headers.ContentType?.MediaType == "text/html")
                     {
-                        var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</br>";
-                        List<string> idTokenClaims = new List<string>(context.Session.GetString("AllIDTokenClaims").Split(';'));
-                        foreach (var idTokenClaim in idTokenClaims)
+                        if(authType == "OIDC")
                         {
-                            List<string> claimSplit = new List<string>(idTokenClaim.Split(':'));
-                            dataToAdd += "<p>" + claimSplit[0] + ": " + claimSplit[1] + "</p></br>";
+                            var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</br>";
+                            List<string> idTokenClaims = new List<string>(context.Session.GetString("AllIDTokenClaims").Split(';'));
+                            foreach (var idTokenClaim in idTokenClaims)
+                            {
+                                List<string> claimSplit = new List<string>(idTokenClaim.Split(':'));
+                                dataToAdd += "<p>" + claimSplit[0] + ": " + claimSplit[1] + "</p></br>";
+                            }
+                            dataToAdd += "</div>";
+
+                            responseToModify += dataToAdd;
                         }
-                        dataToAdd += "</div>";
+                        if(authType == "SAML")
+                        {
+                            var dataToAdd += context.Session.GetString("SAMLClaims");
 
-                        responseToModify += dataToAdd;
+                            responseToModify += dataToAdd;
+                        }
+                        // End of modify section
+
+                        await context.Response.WriteAsync(responseToModify, Encoding.UTF8);
                     }
-                    if(authType == "SAML")
-                    {
-                        dataToAdd += context.Session.GetString("SAMLClaims");
-
-                        responseToModify += dataToAdd;
-                    }
-                    // End of modify section
-
-                    await context.Response.WriteAsync(responseToModify, Encoding.UTF8);
+                    
+                    
                 }
                 return;
             }
