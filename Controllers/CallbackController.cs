@@ -26,7 +26,7 @@ namespace CustomReverseProxy.Controllers
         private readonly ILogger<CallbackController> _logger;
         private readonly IConfiguration _configuration;
 
-        public CallbackController(IConfiguration configuration)
+        public CallbackController(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ILogger<CallbackController> logger)
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
