@@ -71,6 +71,14 @@ namespace CustomReverseProxy.Controllers
                 // Authenticate user session
                 HttpContext.SignInAsync(claimsPrincipal);
                 HttpContext.Session.SetString("IsAuthenticated", "true");
+                HttpContext.Session.SetString("AuthType", identity.AuthenticationType);
+                claimsHtml = "<h1>User Claims</h1><ul>";
+                foreach (Claim claim in identity.Claims)
+                {
+                    claimsHtml += $"<li><strong>{claim.Type}:</strong> {claim.Value}</li>";
+                }
+                claimsHtml += "</ul>";
+                HttpContext.Session.SetString("SAMLClaims", claimsHtml);
 
                 _logger.LogInformation("SAML authentication successful.");
                 Console.WriteLine("SAML authentication successful.");
@@ -143,6 +151,7 @@ namespace CustomReverseProxy.Controllers
                 // Save tokens to session or cookie
                 HttpContext.Session.SetString("id_token", idToken);
                 HttpContext.Session.SetString("access_token", accessToken);
+                HttpContext.Session.SetString("AuthType", identity.AuthenticationType);
                 Console.WriteLine("HttpContext.User.Identity.IsAuthenticated.ToString(): " + HttpContext.User.Identity.IsAuthenticated.ToString());
                 HttpContext.Session.SetString("IsAuthenticated", HttpContext.User.Identity.IsAuthenticated.ToString());
 

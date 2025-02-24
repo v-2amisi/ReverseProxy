@@ -56,6 +56,8 @@ namespace CustomReverseProxy.Middlewares
                     // Modify the response sent to browser before sending
                     var responseToModify = await responseMessage.Content.ReadAsStringAsync();
                     if (responseMessage.Content.Headers.ContentType?.MediaType == "text/html")
+                    var authType = context.Session.GetString("AuthType");
+                    if(authType == "OIDC")
                     {
                         var dataToAdd = "<div>ID Token: " + context.Session.GetString("id_token") + "</br>";
                         List<string> idTokenClaims = new List<string>(context.Session.GetString("AllIDTokenClaims").Split(';'));
@@ -65,6 +67,12 @@ namespace CustomReverseProxy.Middlewares
                             dataToAdd += "<p>" + claimSplit[0] + ": " + claimSplit[1] + "</p></br>";
                         }
                         dataToAdd += "</div>";
+
+                        responseToModify += dataToAdd;
+                    }
+                    if(authType == "SAML")
+                    {
+                        dataToAdd += context.Session.GetString("SAMLClaims");
 
                         responseToModify += dataToAdd;
                     }
@@ -135,7 +143,7 @@ namespace CustomReverseProxy.Middlewares
             if(IsSAMLRoute(requestedPath))
             {
                 bool isAuthenticated = context.Session.GetString("IsAuthenticated") == "True";
-                string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5001";
+                string returnUrl = "https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/app2";
                 if(!isAuthenticated){
                     context.Session.SetString("returnUrl", returnUrl);
                     return (new Uri($"https://ec2-54-82-60-31.compute-1.amazonaws.com:5443/auth/login/saml?redirect_uri={returnUrl}"), "True" == "True");

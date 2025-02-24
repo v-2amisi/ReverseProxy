@@ -36,7 +36,7 @@ namespace CustomReverseProxy.Middlewares
 
             if (loginRequestPath.StartsWithSegments("/auth/login/saml"))
             {
-                context.Response.Redirect("https://dev-vrk5vwulx3wfsclz.us.auth0.com/samlp/Nov7Lx4Ggg3mCh2AGsvmaabV7LV40uvv?redirect_uri=" + HttpUtility.UrlEncode(returnUrl));
+                context.Response.Redirect("https://dev-vrk5vwulx3wfsclz.us.auth0.com/samlp/Nov7Lx4Ggg3mCh2AGsvmaabV7LV40uvv?" + HttpUtility.UrlEncode(returnUrl));
                 return;
             }
 
