@@ -56,6 +56,7 @@ namespace CustomReverseProxy.Controllers
         {
             if (samlResponseModel == null || string.IsNullOrEmpty(samlResponseModel.SamlResponse))
             {
+                Console.WriteLine("SAML Response is null or empty.");
                 _logger.LogError("SAML Response is null or empty.");
                 return BadRequest("Invalid SAML Response.");
             }
@@ -71,6 +72,7 @@ namespace CustomReverseProxy.Controllers
                 HttpContext.Session.SetString("IsAuthenticated", "true");
 
                 _logger.LogInformation("SAML authentication successful.");
+                Console.WriteLine("SAML authentication successful.");
 
                 // Redirect to original requested URL after authentication
                 string returnUrl = HttpContext.Session.GetString("returnUrl") ?? "/";
