@@ -20,30 +20,23 @@ namespace CustomReverseProxy.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            // Check if the request needs authentication
-            //Console.WriteLine(context.Request.Path);
-            //Console.WriteLine(context.User.Identity.IsAuthenticated);
-            //Console.WriteLine(_appSettings.ClientId);
-            //Console.WriteLine(_appSettings.Domain);
-            Console.WriteLine("Auth Middleware Is Authenticated: " + context.Session.GetString("IsAuthenticated"));
-            Console.WriteLine("Auth middleware Path: " + context.Request.Path);
-            Console.WriteLine("Auth middleware response location: " + context.Response.Headers["Location"].ToString());
-            //var loginRequestPath = context.Response.Headers["Location"].ToString();
             var loginRequestPath = context.Request.Path;
-            if (loginRequestPath.StartsWithSegments("/auth/login"))
+            string returnUrl = context.Request.QueryString.Value;
+            if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
+            if (loginRequestPath.StartsWithSegments("/auth/login/oidc"))
             {
-                Console.WriteLine("Auth Middleware: Login process started.");
-                //var loginRequestPathUri = new Uri(loginRequestPath);
-                string returnUrl = context.Request.QueryString.Value;
-                Console.WriteLine("Auth Middleware, redirect URI: " + returnUrl);
-                if (string.IsNullOrEmpty(returnUrl)) returnUrl = "/";
-                // Redirect to Auth0 for authentication
                 var redirectUri = $"{_appSettings.RedirectUri}";
                 var clientId = $"{_appSettings.ClientId}";
                 var domain = $"{_appSettings.Domain}";
                 var scope = "openid profile read:appointments";
                 var audience = "https://test";
                 context.Response.Redirect($"https://{domain}/authorize?client_id={clientId}&response_type=code&scope={scope}&redirect_uri={redirectUri}&state={returnUrl}&audience={audience}");
+                return;
+            }
+
+            if (loginRequestPath.StartsWithSegments("/auth/login/saml"))
+            {
+                context.Response.Redirect("https://dev-vrk5vwulx3wfsclz.us.auth0.com/samlp/Nov7Lx4Ggg3mCh2AGsvmaabV7LV40uvv?" + HttpUtility.UrlEncode(returnUrl));
                 return;
             }
 
