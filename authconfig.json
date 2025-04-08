@@ -1,0 +1,19 @@
+{
+    "Authentication": {
+      "DefaultAuthSource": "oidc",
+      "OIDC": {
+        "Authority": "https://your-auth0-domain/",
+        "ClientId": "your-client-id",
+        "ClientSecret": "your-client-secret",
+        "CallbackPath": "/callback/oidc",
+        "Scopes": [ "openid", "profile", "email" ]
+      },
+      "SAML": {
+        "IdpMetadataUrl": "https://idp.example.com/metadata",
+        "SsoUrl": "https://idp.example.com/sso",
+        "EntityId": "your-entity-id",
+        "CallbackPath": "/callback/saml"
+      }
+    }
+  }
+  

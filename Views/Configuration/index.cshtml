@@ -1,0 +1,60 @@
+@model CustomReverseProxy.Models.AuthenticationConfig
+@{
+    ViewData["Title"] = "Edit Authentication Configuration";
+}
+
+<h1>Edit Authentication Configuration</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<form asp-action="Update" method="post">
+    <div>
+        <label>Default Authentication Source:</label>
+        <input asp-for="DefaultAuthSource" />
+    </div>
+
+    <h2>OIDC Configuration</h2>
+    <div>
+        <label>Authority:</label>
+        <input asp-for="OIDC.Authority" />
+    </div>
+    <div>
+        <label>Client ID:</label>
+        <input asp-for="OIDC.ClientId" />
+    </div>
+    <div>
+        <label>Client Secret:</label>
+        <input asp-for="OIDC.ClientSecret" type="password" />
+    </div>
+    <div>
+        <label>Callback Path:</label>
+        <input asp-for="OIDC.CallbackPath" />
+    </div>
+    <div>
+        <label>Scopes (comma separated):</label>
+        <input value="@string.Join(",", Model.OIDC?.Scopes ?? new List<string>())" name="OIDC.Scopes" />
+    </div>
+
+    <h2>SAML Configuration</h2>
+    <div>
+        <label>IdP Metadata URL:</label>
+        <input asp-for="SAML.IdpMetadataUrl" />
+    </div>
+    <div>
+        <label>SAML SSO URL:</label>
+        <input asp-for="SAML.SsoUrl" />
+    </div>
+    <div>
+        <label>Entity ID:</label>
+        <input asp-for="SAML.EntityId" />
+    </div>
+    <div>
+        <label>Callback Path:</label>
+        <input asp-for="SAML.CallbackPath" />
+    </div>
+
+    <button type="submit">Save Configuration</button>
+</form>
